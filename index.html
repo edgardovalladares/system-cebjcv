@@ -1,639 +1,828 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema de Votaciones CEB-JCV</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --azul: #1a3a6b;
-    --azul-medio: #2563eb;
-    --azul-claro: #dbeafe;
-    --dorado: #b8860b;
-    --dorado-claro: #fef3c7;
-    --rojo: #dc2626;
-    --verde: #16a34a;
-    --gris: #f8fafc;
-  }
-  * { font-family: 'Nunito', sans-serif; }
-  .font-display { font-family: 'Playfair Display', serif; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Votaciones CEB-JCV</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --azul: #1a3a6b;
+      --azul-medio: #2563eb;
+      --azul-claro: #dbeafe;
+      --dorado: #b8860b;
+      --dorado-claro: #fef3c7;
+      --rojo: #dc2626;
+      --verde: #16a34a;
+      --gris: #f8fafc;
+    }
 
-  body { background: #f0f4f8; min-height: 100vh; }
+    * {
+      font-family: 'Nunito', sans-serif;
+    }
 
-  .page { display: none; }
-  .page.active { display: block; }
+    .font-display {
+      font-family: 'Playfair Display', serif;
+    }
 
-  /* Animaciones */
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(37,99,235,0.4); } 70% { box-shadow: 0 0 0 12px rgba(37,99,235,0); } 100% { box-shadow: 0 0 0 0 rgba(37,99,235,0); } }
-  @keyframes checkmark { 0% { transform: scale(0); } 60% { transform: scale(1.2); } 100% { transform: scale(1); } }
-  @keyframes confetti { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(60px) rotate(360deg); opacity: 0; } }
+    body {
+      background: #f0f4f8;
+      min-height: 100vh;
+    }
 
-  .fade-in { animation: fadeIn 0.4s ease forwards; }
+    .page {
+      display: none;
+    }
 
-  .card-candidato {
-    transition: all 0.25s cubic-bezier(.4,0,.2,1);
-    cursor: pointer;
-    position: relative;
-  }
-  .card-candidato:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(26,58,107,0.18); }
-  .card-candidato.selected { 
-    border: 3px solid var(--azul-medio) !important;
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(37,99,235,0.25);
-  }
-  .card-candidato.selected::after {
-    content: '✓';
-    position: absolute;
-    top: -12px; right: -12px;
-    width: 28px; height: 28px;
-    background: var(--azul-medio);
-    color: white;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px; font-weight: 700;
-    animation: checkmark 0.3s ease;
-  }
+    .page.active {
+      display: block;
+    }
 
-  .btn-primary {
-    background: linear-gradient(135deg, var(--azul), var(--azul-medio));
-    color: white; border: none; border-radius: 12px;
-    padding: 14px 32px; font-size: 16px; font-weight: 700;
-    cursor: pointer; transition: all 0.2s;
-    box-shadow: 0 4px 14px rgba(37,99,235,0.35);
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,99,235,0.45); }
-  .btn-primary:active { transform: translateY(0); }
-  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    /* Animaciones */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
 
-  .btn-danger {
-    background: #fef2f2; color: #dc2626; border: 1px solid #fecaca;
-    border-radius: 8px; padding: 8px 16px; font-weight: 700; cursor: pointer;
-    transition: all 0.2s;
-  }
-  .btn-danger:hover { background: #fee2e2; }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-  .input-field {
-    width: 100%; padding: 14px 18px; border: 2px solid #e2e8f0;
-    border-radius: 12px; font-size: 16px; outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    background: white;
-  }
-  .input-field:focus { border-color: var(--azul-medio); box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
+    @keyframes pulse-ring {
+      0% {
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
+      }
 
-  .header-escudo {
-    background: linear-gradient(135deg, var(--azul) 0%, #1e40af 50%, #1a3a6b 100%);
-  }
+      70% {
+        box-shadow: 0 0 0 12px rgba(37, 99, 235, 0);
+      }
 
-  .stat-card {
-    background: white; border-radius: 16px; padding: 20px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    border-left: 4px solid var(--azul-medio);
-  }
+      100% {
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+      }
+    }
 
-  .barra-voto {
-    height: 12px; border-radius: 6px;
-    background: linear-gradient(90deg, var(--azul-medio), #60a5fa);
-    transition: width 0.8s cubic-bezier(.4,0,.2,1);
-  }
+    @keyframes checkmark {
+      0% {
+        transform: scale(0);
+      }
 
-  /* Modal overlay */
-  .overlay {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 100; display: none;
-  }
-  .overlay.show { display: flex; }
-  .modal {
-    background: white; border-radius: 24px;
-    padding: 40px; max-width: 480px; width: 90%;
-    text-align: center; animation: fadeIn 0.3s ease;
-  }
+      60% {
+        transform: scale(1.2);
+      }
 
-  /* Escudo decorativo */
-  .escudo-icon {
-    width: 64px; height: 64px;
-    background: white; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 28px; margin: 0 auto;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-  }
+      100% {
+        transform: scale(1);
+      }
+    }
 
-  .partido-badge {
-    display: inline-block; padding: 3px 10px;
-    border-radius: 20px; font-size: 12px; font-weight: 700;
-    background: var(--azul-claro); color: var(--azul);
-  }
+    @keyframes confetti {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
 
-  /* Loading spinner */
-  .spinner {
-    width: 36px; height: 36px; border: 3px solid #e2e8f0;
-    border-top-color: var(--azul-medio); border-radius: 50%;
-    animation: spin 0.8s linear infinite; margin: 0 auto;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
+      100% {
+        transform: translateY(60px) rotate(360deg);
+        opacity: 0;
+      }
+    }
 
-  /* Tablet mode optimizations */
-  @media (max-width: 768px) {
-    .card-candidato { touch-action: manipulation; }
-    .btn-primary { width: 100%; }
-  }
+    .fade-in {
+      animation: fadeIn 0.4s ease forwards;
+    }
 
-  /* Versión tag */
-  .version-tag {
-    font-size: 11px; opacity: 0.7; letter-spacing: 0.5px;
-  }
+    .card-candidato {
+      transition: all 0.25s cubic-bezier(.4, 0, .2, 1);
+      cursor: pointer;
+      position: relative;
+    }
 
-  /* Toast */
-  #toast {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px);
-    background: #1e293b; color: white; padding: 12px 24px;
-    border-radius: 40px; font-weight: 600; font-size: 14px;
-    transition: transform 0.4s cubic-bezier(.4,0,.2,1);
-    z-index: 999; pointer-events: none;
-    white-space: nowrap;
-  }
-  #toast.show { transform: translateX(-50%) translateY(0); }
-  #toast.success { background: #15803d; }
-  #toast.error { background: #dc2626; }
-</style>
+    .card-candidato:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(26, 58, 107, 0.18);
+    }
+
+    .card-candidato.selected {
+      border: 3px solid var(--azul-medio) !important;
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(37, 99, 235, 0.25);
+    }
+
+    .card-candidato.selected::after {
+      content: '✓';
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      width: 28px;
+      height: 28px;
+      background: var(--azul-medio);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      animation: checkmark 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--azul), var(--azul-medio));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 32px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-danger {
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-danger:hover {
+      background: #fee2e2;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: white;
+    }
+
+    .input-field:focus {
+      border-color: var(--azul-medio);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .header-escudo {
+      background: linear-gradient(135deg, var(--azul) 0%, #1e40af 50%, #1a3a6b 100%);
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+      border-left: 4px solid var(--azul-medio);
+    }
+
+    .barra-voto {
+      height: 12px;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--azul-medio), #60a5fa);
+      transition: width 0.8s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    /* Modal overlay */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      display: none;
+    }
+
+    .overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 480px;
+      width: 90%;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    /* Escudo decorativo */
+    .escudo-icon {
+      width: 64px;
+      height: 64px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin: 0 auto;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .partido-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--azul-claro);
+      color: var(--azul);
+    }
+
+    /* Loading spinner */
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #e2e8f0;
+      border-top-color: var(--azul-medio);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Tablet mode optimizations */
+    @media (max-width: 768px) {
+      .card-candidato {
+        touch-action: manipulation;
+      }
+
+      .btn-primary {
+        width: 100%;
+      }
+    }
+
+    /* Versión tag */
+    .version-tag {
+      font-size: 11px;
+      opacity: 0.7;
+      letter-spacing: 0.5px;
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #1e293b;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: transform 0.4s cubic-bezier(.4, 0, .2, 1);
+      z-index: 999;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    #toast.success {
+      background: #15803d;
+    }
+
+    #toast.error {
+      background: #dc2626;
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- TOAST -->
-<div id="toast"></div>
+  <!-- TOAST -->
+  <div id="toast"></div>
 
-<!-- ===================== LOGIN ===================== -->
-<div id="page-login" class="page active min-h-screen flex flex-col">
-  
-  <!-- Header institucional -->
-  <div class="header-escudo py-6 px-4 text-center text-white">
-    <div class="escudo-icon mb-3">🏛️</div>
-    <h1 class="font-display text-2xl font-bold tracking-tight">Sistema de Votaciones</h1>
-    <p class="text-blue-200 text-sm font-semibold mt-1">CEB-JCV</p>
-    <p class="version-tag text-blue-300 mt-1">v1.0 · Bachillerato en Informática 2026</p>
-  </div>
+  <!-- ===================== LOGIN ===================== -->
+  <div id="page-login" class="page active min-h-screen flex flex-col">
 
-  <!-- Formulario -->
-  <div class="flex-1 flex items-center justify-center px-4 py-10">
-    <div class="bg-white rounded-3xl shadow-xl p-8 w-full max-w-sm fade-in">
-      <h2 class="text-xl font-bold text-gray-800 mb-1">Acceso Administrativo</h2>
-      <p class="text-gray-500 text-sm mb-6">Ingresa tus credenciales para continuar</p>
-      
-      <div class="space-y-4">
-        <div>
-          <label class="text-sm font-700 text-gray-600 mb-1 block">Usuario</label>
-          <input id="login-user" type="text" class="input-field" placeholder="admin" autocomplete="username">
-        </div>
-        <div>
-          <label class="text-sm font-700 text-gray-600 mb-1 block">Contraseña</label>
-          <input id="login-pass" type="password" class="input-field" placeholder="••••••••" autocomplete="current-password">
-        </div>
-      </div>
-
-      <div id="login-error" class="hidden mt-3 bg-red-50 text-red-600 text-sm p-3 rounded-xl font-semibold"></div>
-
-      <button class="btn-primary mt-6 w-full" onclick="doLogin()">
-        Ingresar al Sistema
-      </button>
-
-      <p class="text-center text-xs text-gray-400 mt-6">
-        Sistema desarrollado por<br>
-        <span class="font-bold text-gray-500">Carrera de Bachillerato en Informática · 2026</span>
-      </p>
-    </div>
-  </div>
-</div>
-
-<!-- ===================== VOTACIÓN PÚBLICA ===================== -->
-<div id="page-votacion" class="page min-h-screen flex flex-col">
-
-  <!-- Header votación -->
-  <div class="header-escudo px-4 py-5 text-white">
-    <div class="flex items-center justify-between max-w-4xl mx-auto">
-      <div class="flex items-center gap-3">
-        <div class="escudo-icon" style="width:48px;height:48px;font-size:22px;">🏛️</div>
-        <div>
-          <h1 class="font-display text-lg font-bold leading-tight">Sistema de Votaciones CEB-JCV</h1>
-          <p class="text-blue-200 text-xs">Elección Presidencial Estudiantil 2026</p>
-        </div>
-      </div>
-      <button onclick="showAdmin()" class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white text-xs font-bold px-3 py-2 rounded-xl transition-all">
-        Admin
-      </button>
-    </div>
-  </div>
-
-  <!-- Paso 1: Ingreso DNI -->
-  <div id="step-dni" class="flex-1 flex items-center justify-center px-4 py-10">
-    <div class="bg-white rounded-3xl shadow-xl p-8 w-full max-w-md fade-in text-center">
-      <div class="text-5xl mb-4">🪪</div>
-      <h2 class="text-2xl font-bold text-gray-800 mb-2">Identificación del Votante</h2>
-      <p class="text-gray-500 mb-6">Ingresa tu número de DNI hondureño para comenzar</p>
-      
-      <div class="text-left mb-4">
-        <label class="text-sm font-700 text-gray-600 mb-2 block">Número de DNI</label>
-        <input id="dni-input" type="text" class="input-field text-center text-xl tracking-widest"
-          placeholder="0000-0000-00000" maxlength="15"
-          oninput="formatDNI(this)"
-          onkeypress="if(event.key==='Enter') verificarDNI()">
-      </div>
-      <p class="text-xs text-gray-400 mb-6">Formato: ####-####-#####</p>
-      
-      <button class="btn-primary w-full" onclick="verificarDNI()" id="btn-verificar">
-        Verificar y Continuar
-      </button>
-    </div>
-  </div>
-
-  <!-- Paso 2: Selección candidato -->
-  <div id="step-candidatos" class="hidden px-4 py-8 fade-in">
-    <div class="max-w-4xl mx-auto">
-      <div class="text-center mb-8">
-        <h2 class="text-2xl font-bold text-gray-800 mb-1">Selecciona tu Candidato</h2>
-        <p class="text-gray-500">DNI verificado: <span id="dni-display" class="font-bold text-blue-600"></span></p>
-        <div class="inline-block mt-2 bg-green-50 text-green-700 text-sm font-bold px-4 py-1 rounded-full">
-          ✓ Habilitado para votar
-        </div>
-      </div>
-
-      <div id="candidatos-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"></div>
-
-      <div class="text-center">
-        <button class="btn-primary px-16" onclick="confirmarVoto()" id="btn-votar" disabled>
-          Emitir mi Voto
-        </button>
-        <p class="text-xs text-gray-400 mt-3">Selecciona un candidato para activar el botón</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===================== ADMIN DASHBOARD ===================== -->
-<div id="page-admin" class="page min-h-screen bg-gray-50">
-  
-  <!-- Sidebar + Content -->
-  <div class="flex min-h-screen">
-    
-    <!-- Sidebar -->
-    <div class="w-64 header-escudo text-white flex flex-col" style="min-height:100vh;">
-      <div class="p-6 border-b border-white border-opacity-20">
-        <div class="text-2xl mb-2">🏛️</div>
-        <h2 class="font-display text-lg font-bold">CEB-JCV</h2>
-        <p class="text-blue-200 text-xs mt-1">Panel Administrativo</p>
-        <p class="version-tag text-blue-300 mt-1">v1.0 · 2026</p>
-      </div>
-      
-      <nav class="flex-1 p-4 space-y-1">
-        <button onclick="showTab('tab-dashboard')" class="nav-btn active w-full text-left px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-3 transition-all">
-          📊 Dashboard
-        </button>
-        <button onclick="showTab('tab-candidatos')" class="nav-btn w-full text-left px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-3 transition-all">
-          👤 Candidatos
-        </button>
-        <button onclick="showTab('tab-control')" class="nav-btn w-full text-left px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-3 transition-all">
-          ⚙️ Control
-        </button>
-      </nav>
-
-      <div class="p-4 border-t border-white border-opacity-20">
-        <button onclick="irAVotacion()" class="w-full bg-white bg-opacity-15 hover:bg-opacity-25 text-white text-sm font-bold px-4 py-3 rounded-xl transition-all mb-2">
-          🖥️ Ver Pantalla de Votación
-        </button>
-        <button onclick="logout()" class="w-full bg-red-500 bg-opacity-80 hover:bg-opacity-100 text-white text-sm font-bold px-4 py-3 rounded-xl transition-all">
-          Cerrar Sesión
-        </button>
-      </div>
+    <!-- Header institucional -->
+    <div class="header-escudo py-6 px-4 text-center text-white">
+      <div class="escudo-icon mb-3">🏛️</div>
+      <h1 class="font-display text-2xl font-bold tracking-tight">Sistema de Votaciones</h1>
+      <p class="text-blue-200 text-sm font-semibold mt-1">CEB-JCV</p>
+      <p class="version-tag text-blue-300 mt-1">v1.0 · Bachillerato en Informática 2026</p>
     </div>
 
-    <!-- Contenido principal -->
-    <div class="flex-1 p-8 overflow-y-auto">
+    <!-- Formulario -->
+    <div class="flex-1 flex items-center justify-center px-4 py-10">
+      <div class="bg-white rounded-3xl shadow-xl p-8 w-full max-w-sm fade-in">
+        <h2 class="text-xl font-bold text-gray-800 mb-1">Acceso Administrativo</h2>
+        <p class="text-gray-500 text-sm mb-6">Ingresa tus credenciales para continuar</p>
 
-      <!-- TAB DASHBOARD -->
-      <div id="tab-dashboard" class="admin-tab fade-in">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Dashboard de Estadísticas</h2>
-        
-        <!-- Stats cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8" id="stats-cards">
-          <div class="stat-card">
-            <p class="text-gray-500 text-sm font-semibold mb-1">Total de Votos</p>
-            <p class="text-3xl font-bold text-blue-700" id="stat-total">—</p>
+        <div class="space-y-4">
+          <div>
+            <label class="text-sm font-700 text-gray-600 mb-1 block">Usuario</label>
+            <input id="login-user" type="text" class="input-field" placeholder="admin" autocomplete="username">
           </div>
-          <div class="stat-card" style="border-left-color: #16a34a;">
-            <p class="text-gray-500 text-sm font-semibold mb-1">Candidatos Activos</p>
-            <p class="text-3xl font-bold text-green-700" id="stat-candidatos">—</p>
-          </div>
-          <div class="stat-card" style="border-left-color: #b8860b;">
-            <p class="text-gray-500 text-sm font-semibold mb-1">Estado Votación</p>
-            <p class="text-xl font-bold" id="stat-estado">—</p>
+          <div>
+            <label class="text-sm font-700 text-gray-600 mb-1 block">Contraseña</label>
+            <input id="login-pass" type="password" class="input-field" placeholder="••••••••"
+              autocomplete="current-password">
           </div>
         </div>
 
-        <!-- Resultados por candidato -->
-        <div class="bg-white rounded-2xl shadow-sm p-6">
-          <h3 class="text-lg font-bold text-gray-700 mb-5">Resultados en Tiempo Real</h3>
-          <div id="resultados-lista"></div>
+        <div id="login-error" class="hidden mt-3 bg-red-50 text-red-600 text-sm p-3 rounded-xl font-semibold"></div>
+
+        <button class="btn-primary mt-6 w-full" onclick="doLogin()">
+          Ingresar al Sistema
+        </button>
+
+        <p class="text-center text-xs text-gray-400 mt-6">
+          Sistema desarrollado por<br>
+          <span class="font-bold text-gray-500">Carrera de Bachillerato en Informática · 2026</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== VOTACIÓN PÚBLICA ===================== -->
+  <div id="page-votacion" class="page min-h-screen flex flex-col">
+
+    <!-- Header votación -->
+    <div class="header-escudo px-4 py-5 text-white">
+      <div class="flex items-center justify-between max-w-4xl mx-auto">
+        <div class="flex items-center gap-3">
+          <div class="escudo-icon" style="width:48px;height:48px;font-size:22px;">🏛️</div>
+          <div>
+            <h1 class="font-display text-lg font-bold leading-tight">Sistema de Votaciones CEB-JCV</h1>
+            <p class="text-blue-200 text-xs">Elección Presidencial Estudiantil 2026</p>
+          </div>
+        </div>
+        <button onclick="showAdmin()"
+          class="bg-white bg-opacity-20 hover:bg-opacity-30 text-white text-xs font-bold px-3 py-2 rounded-xl transition-all">
+          Admin
+        </button>
+      </div>
+    </div>
+
+    <!-- Paso 1: Ingreso DNI -->
+    <div id="step-dni" class="flex-1 flex items-center justify-center px-4 py-10">
+      <div class="bg-white rounded-3xl shadow-xl p-8 w-full max-w-md fade-in text-center">
+        <div class="text-5xl mb-4">🪪</div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Identificación del Votante</h2>
+        <p class="text-gray-500 mb-6">Ingresa tu número de DNI hondureño para comenzar</p>
+
+        <div class="text-left mb-4">
+          <label class="text-sm font-700 text-gray-600 mb-2 block">Número de DNI</label>
+          <input id="dni-input" type="text" class="input-field text-center text-xl tracking-widest"
+            placeholder="0000-0000-00000" maxlength="15" oninput="formatDNI(this)"
+            onkeypress="if(event.key==='Enter') verificarDNI()">
+        </div>
+        <p class="text-xs text-gray-400 mb-6">Formato: ####-####-#####</p>
+
+        <button class="btn-primary w-full" onclick="verificarDNI()" id="btn-verificar">
+          Verificar y Continuar
+        </button>
+      </div>
+    </div>
+
+    <!-- Paso 2: Selección candidato -->
+    <div id="step-candidatos" class="hidden px-4 py-8 fade-in">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-1">Selecciona tu Candidato</h2>
+          <p class="text-gray-500">DNI verificado: <span id="dni-display" class="font-bold text-blue-600"></span></p>
+          <div class="inline-block mt-2 bg-green-50 text-green-700 text-sm font-bold px-4 py-1 rounded-full">
+            ✓ Habilitado para votar
+          </div>
+        </div>
+
+        <div id="candidatos-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"></div>
+
+        <div class="text-center">
+          <button class="btn-primary px-16" onclick="confirmarVoto()" id="btn-votar" disabled>
+            Emitir mi Voto
+          </button>
+          <p class="text-xs text-gray-400 mt-3">Selecciona un candidato para activar el botón</p>
         </div>
       </div>
+    </div>
+  </div>
 
-      <!-- TAB CANDIDATOS -->
-      <div id="tab-candidatos" class="admin-tab hidden fade-in">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="text-2xl font-bold text-gray-800">Gestión de Candidatos</h2>
-          <button onclick="toggleFormCandidato()" class="btn-primary" style="padding: 10px 20px; font-size:14px;">
-            + Agregar Candidato
+  <!-- ===================== ADMIN DASHBOARD ===================== -->
+  <div id="page-admin" class="page min-h-screen bg-gray-50">
+
+    <!-- Sidebar + Content -->
+    <div class="flex min-h-screen">
+
+      <!-- Sidebar -->
+      <div class="w-64 header-escudo text-white flex flex-col" style="min-height:100vh;">
+        <div class="p-6 border-b border-white border-opacity-20">
+          <div class="text-2xl mb-2">🏛️</div>
+          <h2 class="font-display text-lg font-bold">CEB-JCV</h2>
+          <p class="text-blue-200 text-xs mt-1">Panel Administrativo</p>
+          <p class="version-tag text-blue-300 mt-1">v1.0 · 2026</p>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-1">
+          <button onclick="showTab('tab-dashboard')"
+            class="nav-btn active w-full text-left px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-3 transition-all">
+            📊 Dashboard
+          </button>
+          <button onclick="showTab('tab-candidatos')"
+            class="nav-btn w-full text-left px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-3 transition-all">
+            👤 Candidatos
+          </button>
+          <button onclick="showTab('tab-control')"
+            class="nav-btn w-full text-left px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-3 transition-all">
+            ⚙️ Control
+          </button>
+        </nav>
+
+        <div class="p-4 border-t border-white border-opacity-20">
+          <button onclick="irAVotacion()"
+            class="w-full bg-white bg-opacity-15 hover:bg-opacity-25 text-white text-sm font-bold px-4 py-3 rounded-xl transition-all mb-2">
+            🖥️ Ver Pantalla de Votación
+          </button>
+          <button onclick="logout()"
+            class="w-full bg-red-500 bg-opacity-80 hover:bg-opacity-100 text-white text-sm font-bold px-4 py-3 rounded-xl transition-all">
+            Cerrar Sesión
           </button>
         </div>
+      </div>
 
-        <!-- Formulario agregar -->
-        <div id="form-candidato" class="hidden bg-white rounded-2xl shadow-sm p-6 mb-6 fade-in">
-          <h3 class="text-lg font-bold text-gray-700 mb-4">Nuevo Candidato</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="text-sm font-700 text-gray-600 mb-1 block">Nombre Completo</label>
-              <input id="cand-nombre" class="input-field" placeholder="Ej: Juan Carlos López">
+      <!-- Contenido principal -->
+      <div class="flex-1 p-8 overflow-y-auto">
+
+        <!-- TAB DASHBOARD -->
+        <div id="tab-dashboard" class="admin-tab fade-in">
+          <h2 class="text-2xl font-bold text-gray-800 mb-6">Dashboard de Estadísticas</h2>
+
+          <!-- Stats cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8" id="stats-cards">
+            <div class="stat-card">
+              <p class="text-gray-500 text-sm font-semibold mb-1">Total de Votos</p>
+              <p class="text-3xl font-bold text-blue-700" id="stat-total">—</p>
             </div>
-            <div>
-              <label class="text-sm font-700 text-gray-600 mb-1 block">Partido / Corriente</label>
-              <input id="cand-partido" class="input-field" placeholder="Ej: Movimiento Renovación">
+            <div class="stat-card" style="border-left-color: #16a34a;">
+              <p class="text-gray-500 text-sm font-semibold mb-1">Candidatos Activos</p>
+              <p class="text-3xl font-bold text-green-700" id="stat-candidatos">—</p>
             </div>
-            <div class="sm:col-span-2">
-              <label class="text-sm font-700 text-gray-600 mb-1 block">URL de la Foto del Candidato</label>
-              <input id="cand-foto" class="input-field" placeholder="https://... (enlace directo a la imagen)">
-              <p class="text-xs text-gray-400 mt-1">Puedes subir la foto a Google Drive y copiar el enlace directo, o usar Imgur, etc.</p>
+            <div class="stat-card" style="border-left-color: #b8860b;">
+              <p class="text-gray-500 text-sm font-semibold mb-1">Estado Votación</p>
+              <p class="text-xl font-bold" id="stat-estado">—</p>
             </div>
           </div>
-          <div class="flex gap-3 mt-4">
-            <button class="btn-primary" style="padding:10px 24px;font-size:14px;" onclick="agregarCandidato()">Guardar Candidato</button>
-            <button onclick="toggleFormCandidato()" class="text-gray-500 font-bold px-4 py-2 rounded-xl hover:bg-gray-100 transition-all">Cancelar</button>
+
+          <!-- Resultados por candidato -->
+          <div class="bg-white rounded-2xl shadow-sm p-6">
+            <h3 class="text-lg font-bold text-gray-700 mb-5">Resultados en Tiempo Real</h3>
+            <div id="resultados-lista"></div>
           </div>
         </div>
 
-        <!-- Lista candidatos admin -->
-        <div id="candidatos-admin-lista" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
-      </div>
-
-      <!-- TAB CONTROL -->
-      <div id="tab-control" class="admin-tab hidden fade-in">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Control de Votación</h2>
-
-        <div class="bg-white rounded-2xl shadow-sm p-6 mb-5">
-          <h3 class="text-lg font-bold text-gray-700 mb-2">Estado de la Votación</h3>
-          <p class="text-gray-500 text-sm mb-5">Activa o desactiva la votación para controlar cuándo los estudiantes pueden votar.</p>
-          
-          <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
-            <div>
-              <p class="font-bold text-gray-700" id="control-estado-label">Cargando...</p>
-              <p class="text-sm text-gray-500" id="control-estado-desc">—</p>
-            </div>
-            <button id="btn-toggle-votacion" onclick="toggleVotacion()" class="btn-primary" style="padding:12px 28px;">
-              —
+        <!-- TAB CANDIDATOS -->
+        <div id="tab-candidatos" class="admin-tab hidden fade-in">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Gestión de Candidatos</h2>
+            <button onclick="toggleFormCandidato()" class="btn-primary" style="padding: 10px 20px; font-size:14px;">
+              + Agregar Candidato
             </button>
           </div>
+
+          <!-- Formulario agregar -->
+          <div id="form-candidato" class="hidden bg-white rounded-2xl shadow-sm p-6 mb-6 fade-in">
+            <h3 class="text-lg font-bold text-gray-700 mb-4">Nuevo Candidato</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="text-sm font-700 text-gray-600 mb-1 block">Nombre Completo</label>
+                <input id="cand-nombre" class="input-field" placeholder="Ej: Juan Carlos López">
+              </div>
+              <div>
+                <label class="text-sm font-700 text-gray-600 mb-1 block">Partido / Corriente</label>
+                <input id="cand-partido" class="input-field" placeholder="Ej: Movimiento Renovación">
+              </div>
+              <div class="sm:col-span-2">
+                <label class="text-sm font-700 text-gray-600 mb-1 block">URL de la Foto del Candidato</label>
+                <input id="cand-foto" class="input-field" placeholder="https://... (enlace directo a la imagen)">
+                <p class="text-xs text-gray-400 mt-1">Puedes subir la foto a Google Drive y copiar el enlace directo, o
+                  usar Imgur, etc.</p>
+              </div>
+            </div>
+            <div class="flex gap-3 mt-4">
+              <button class="btn-primary" style="padding:10px 24px;font-size:14px;" onclick="agregarCandidato()">Guardar
+                Candidato</button>
+              <button onclick="toggleFormCandidato()"
+                class="text-gray-500 font-bold px-4 py-2 rounded-xl hover:bg-gray-100 transition-all">Cancelar</button>
+            </div>
+          </div>
+
+          <!-- Lista candidatos admin -->
+          <div id="candidatos-admin-lista" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
         </div>
 
-        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5">
-          <p class="font-bold text-amber-800 mb-1">⚠️ Importante</p>
-          <p class="text-amber-700 text-sm">Recuerda configurar la URL de tu Google Apps Script en el archivo de configuración del sistema antes de usar. Consulta el archivo <code class="bg-amber-100 px-1 rounded">config.js</code> o la sección de configuración.</p>
+        <!-- TAB CONTROL -->
+        <div id="tab-control" class="admin-tab hidden fade-in">
+          <h2 class="text-2xl font-bold text-gray-800 mb-6">Control de Votación</h2>
+
+          <div class="bg-white rounded-2xl shadow-sm p-6 mb-5">
+            <h3 class="text-lg font-bold text-gray-700 mb-2">Estado de la Votación</h3>
+            <p class="text-gray-500 text-sm mb-5">Activa o desactiva la votación para controlar cuándo los estudiantes
+              pueden votar.</p>
+
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+              <div>
+                <p class="font-bold text-gray-700" id="control-estado-label">Cargando...</p>
+                <p class="text-sm text-gray-500" id="control-estado-desc">—</p>
+              </div>
+              <button id="btn-toggle-votacion" onclick="toggleVotacion()" class="btn-primary"
+                style="padding:12px 28px;">
+                —
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+            <p class="font-bold text-amber-800 mb-1">⚠️ Importante</p>
+            <p class="text-amber-700 text-sm">Recuerda configurar la URL de tu Google Apps Script en el archivo de
+              configuración del sistema antes de usar. Consulta el archivo <code
+                class="bg-amber-100 px-1 rounded">config.js</code> o la sección de configuración.</p>
+          </div>
         </div>
+
       </div>
-
     </div>
   </div>
-</div>
 
-<!-- ===================== CONFIRMACIÓN VOTO ===================== -->
-<div class="overlay" id="overlay-confirmar">
-  <div class="modal">
-    <div class="text-5xl mb-4">🗳️</div>
-    <h3 class="text-xl font-bold text-gray-800 mb-2">¿Confirmas tu voto?</h3>
-    <p class="text-gray-500 mb-2">Estás votando por:</p>
-    <div id="confirm-candidato-info" class="bg-blue-50 rounded-xl p-4 mb-5">
-      <p class="font-bold text-blue-800 text-lg" id="confirm-nombre">—</p>
-      <p class="text-blue-600 text-sm" id="confirm-partido">—</p>
+  <!-- ===================== CONFIRMACIÓN VOTO ===================== -->
+  <div class="overlay" id="overlay-confirmar">
+    <div class="modal">
+      <div class="text-5xl mb-4">🗳️</div>
+      <h3 class="text-xl font-bold text-gray-800 mb-2">¿Confirmas tu voto?</h3>
+      <p class="text-gray-500 mb-2">Estás votando por:</p>
+      <div id="confirm-candidato-info" class="bg-blue-50 rounded-xl p-4 mb-5">
+        <p class="font-bold text-blue-800 text-lg" id="confirm-nombre">—</p>
+        <p class="text-blue-600 text-sm" id="confirm-partido">—</p>
+      </div>
+      <p class="text-xs text-gray-400 mb-5">Esta acción no se puede deshacer. Solo puedes votar una vez.</p>
+      <div class="flex gap-3">
+        <button onclick="cerrarOverlay('overlay-confirmar')"
+          class="flex-1 bg-gray-100 text-gray-600 font-bold py-3 rounded-xl hover:bg-gray-200 transition-all">
+          Cancelar
+        </button>
+        <button onclick="emitirVoto()" class="flex-1 btn-primary" style="padding:12px;">
+          Confirmar Voto ✓
+        </button>
+      </div>
     </div>
-    <p class="text-xs text-gray-400 mb-5">Esta acción no se puede deshacer. Solo puedes votar una vez.</p>
-    <div class="flex gap-3">
-      <button onclick="cerrarOverlay('overlay-confirmar')" class="flex-1 bg-gray-100 text-gray-600 font-bold py-3 rounded-xl hover:bg-gray-200 transition-all">
-        Cancelar
+  </div>
+
+  <!-- ===================== ÉXITO VOTO ===================== -->
+  <div class="overlay" id="overlay-exito">
+    <div class="modal">
+      <div class="text-6xl mb-4" style="animation: checkmark 0.5s ease;">✅</div>
+      <h3 class="text-2xl font-bold text-gray-800 mb-2">¡Voto Registrado!</h3>
+      <p class="text-gray-500 mb-6">Tu voto ha sido emitido exitosamente.<br>Gracias por participar en la democracia
+        estudiantil.</p>
+      <div class="bg-green-50 rounded-xl p-4 mb-6 text-left">
+        <p class="text-green-700 text-sm"><strong>DNI:</strong> <span id="exito-dni">—</span></p>
+        <p class="text-green-700 text-sm mt-1"><strong>Candidato:</strong> <span id="exito-candidato">—</span></p>
+        <p class="text-green-700 text-sm mt-1"><strong>Hora:</strong> <span id="exito-hora">—</span></p>
+      </div>
+      <button onclick="resetVotacion()" class="btn-primary w-full">
+        Siguiente Votante
       </button>
-      <button onclick="emitirVoto()" class="flex-1 btn-primary" style="padding:12px;">
-        Confirmar Voto ✓
-      </button>
     </div>
   </div>
-</div>
 
-<!-- ===================== ÉXITO VOTO ===================== -->
-<div class="overlay" id="overlay-exito">
-  <div class="modal">
-    <div class="text-6xl mb-4" style="animation: checkmark 0.5s ease;">✅</div>
-    <h3 class="text-2xl font-bold text-gray-800 mb-2">¡Voto Registrado!</h3>
-    <p class="text-gray-500 mb-6">Tu voto ha sido emitido exitosamente.<br>Gracias por participar en la democracia estudiantil.</p>
-    <div class="bg-green-50 rounded-xl p-4 mb-6 text-left">
-      <p class="text-green-700 text-sm"><strong>DNI:</strong> <span id="exito-dni">—</span></p>
-      <p class="text-green-700 text-sm mt-1"><strong>Candidato:</strong> <span id="exito-candidato">—</span></p>
-      <p class="text-green-700 text-sm mt-1"><strong>Hora:</strong> <span id="exito-hora">—</span></p>
-    </div>
-    <button onclick="resetVotacion()" class="btn-primary w-full">
-      Siguiente Votante
-    </button>
-  </div>
-</div>
-
-<!-- ===================== CONFIG SCRIPT URL ===================== -->
-<div class="overlay" id="overlay-config">
-  <div class="modal">
-    <div class="text-4xl mb-3">⚙️</div>
-    <h3 class="text-xl font-bold text-gray-800 mb-2">Configurar API</h3>
-    <p class="text-gray-500 text-sm mb-4">Pega aquí la URL de tu Google Apps Script para conectar el sistema con Google Sheets.</p>
-    <input id="config-url-input" class="input-field mb-4" placeholder="https://script.google.com/macros/s/...">
-    <div class="flex gap-3">
-      <button onclick="cerrarOverlay('overlay-config')" class="flex-1 bg-gray-100 text-gray-600 font-bold py-3 rounded-xl">Cancelar</button>
-      <button onclick="guardarConfigURL()" class="flex-1 btn-primary" style="padding:12px;">Guardar URL</button>
+  <!-- ===================== CONFIG SCRIPT URL ===================== -->
+  <div class="overlay" id="overlay-config">
+    <div class="modal">
+      <div class="text-4xl mb-3">⚙️</div>
+      <h3 class="text-xl font-bold text-gray-800 mb-2">Configurar API</h3>
+      <p class="text-gray-500 text-sm mb-4">Pega aquí la URL de tu Google Apps Script para conectar el sistema con
+        Google Sheets.</p>
+      <input id="config-url-input" class="input-field mb-4" placeholder="https://script.google.com/macros/s/...">
+      <div class="flex gap-3">
+        <button onclick="cerrarOverlay('overlay-config')"
+          class="flex-1 bg-gray-100 text-gray-600 font-bold py-3 rounded-xl">Cancelar</button>
+        <button onclick="guardarConfigURL()" class="flex-1 btn-primary" style="padding:12px;">Guardar URL</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-// ============================================================
-//  CONFIGURACIÓN — CAMBIA ESTA URL POR LA DE TU APPS SCRIPT
-// ============================================================
-let API_URL = localStorage.getItem('ceb_api_url') || '';
+  <script>
+    // ============================================================
+    //  CONFIGURACIÓN — CAMBIA ESTA URL POR LA DE TU APPS SCRIPT
+    // ============================================================
+    let API_URL = localStorage.getItem('ceb_api_url') || '';
 
-// ============================================================
-// Estado global
-// ============================================================
-let estadoApp = {
-  candidatos: [],
-  dniActual: '',
-  candidatoSeleccionado: null,
-  votacionActiva: true,
-  estadisticas: null,
-  isAdmin: false,
-  adminLogged: false
-};
+    // ============================================================
+    // Estado global
+    // ============================================================
+    let estadoApp = {
+      candidatos: [],
+      dniActual: '',
+      candidatoSeleccionado: null,
+      votacionActiva: true,
+      estadisticas: null,
+      isAdmin: false,
+      adminLogged: false
+    };
 
-// ============================================================
-// Utilidades
-// ============================================================
-function showToast(msg, tipo='') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = `show ${tipo}`;
-  setTimeout(() => t.className = '', 3000);
-}
-
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-function showOverlay(id) {
-  document.getElementById(id).classList.add('show');
-}
-function cerrarOverlay(id) {
-  document.getElementById(id).classList.remove('show');
-}
-
-function mostrarSpinner(containerId, msg='Cargando...') {
-  document.getElementById(containerId).innerHTML = `<div class="py-8 text-center"><div class="spinner"></div><p class="text-gray-400 text-sm mt-3">${msg}</p></div>`;
-}
-
-function formatDNI(input) {
-  let v = input.value.replace(/[^0-9]/g, '');
-  if (v.length > 4 && v.length <= 8) v = v.slice(0,4) + '-' + v.slice(4);
-  else if (v.length > 8) v = v.slice(0,4) + '-' + v.slice(4,8) + '-' + v.slice(8,13);
-  input.value = v;
-}
-
-async function apiCall(body) {
-  if (!API_URL) {
-    showOverlay('overlay-config');
-    throw new Error('Sin URL de API configurada');
-  }
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    body: JSON.stringify(body),
-    headers: {'Content-Type': 'application/json'}
-  });
-  return await res.json();
-}
-
-// ============================================================
-// LOGIN
-// ============================================================
-async function doLogin() {
-  const user = document.getElementById('login-user').value.trim();
-  const pass = document.getElementById('login-pass').value;
-  const errEl = document.getElementById('login-error');
-  errEl.classList.add('hidden');
-  
-  if (!user || !pass) {
-    errEl.textContent = 'Por favor completa todos los campos.';
-    errEl.classList.remove('hidden'); return;
-  }
-  
-  try {
-    const data = await apiCall({action: 'login', usuario: user, password: pass});
-    if (data.ok) {
-      estadoApp.adminLogged = true;
-      showPage('page-admin');
-      loadDashboard();
-      loadCandidatosAdmin();
-      loadControlEstado();
-    } else {
-      errEl.textContent = data.msg || 'Credenciales incorrectas.';
-      errEl.classList.remove('hidden');
+    // ============================================================
+    // Utilidades
+    // ============================================================
+    function showToast(msg, tipo = '') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = `show ${tipo}`;
+      setTimeout(() => t.className = '', 3000);
     }
-  } catch(e) {
-    if (!API_URL) return;
-    errEl.textContent = 'Error de conexión. Verifica la URL del API.';
-    errEl.classList.remove('hidden');
-  }
-}
 
-document.getElementById('login-pass').addEventListener('keypress', e => {
-  if (e.key === 'Enter') doLogin();
-});
-
-// ============================================================
-// VOTACIÓN
-// ============================================================
-function showAdmin() {
-  if (estadoApp.adminLogged) {
-    showPage('page-admin');
-  } else {
-    showPage('page-login');
-  }
-}
-
-function irAVotacion() {
-  showPage('page-votacion');
-  resetVotacion();
-}
-
-function logout() {
-  estadoApp.adminLogged = false;
-  showPage('page-login');
-}
-
-async function verificarDNI() {
-  const dni = document.getElementById('dni-input').value.trim();
-  if (dni.length < 13) {
-    showToast('DNI inválido. Ingresa los 13 dígitos.', 'error'); return;
-  }
-  
-  const btn = document.getElementById('btn-verificar');
-  btn.disabled = true; btn.textContent = 'Verificando...';
-  
-  try {
-    // Verificar votación activa
-    const est = await apiCall({action: 'getEstadisticas'});
-    if (!est.votacionActiva) {
-      showToast('La votación no está activa en este momento.', 'error');
-      btn.disabled = false; btn.textContent = 'Verificar y Continuar'; return;
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
     }
-    
-    // Verificar DNI
-    const res = await apiCall({action: 'checkDNI', dni});
-    if (res.yaVoto) {
-      showToast('Este DNI ya emitió su voto.', 'error');
-      btn.disabled = false; btn.textContent = 'Verificar y Continuar'; return;
-    }
-    
-    // Cargar candidatos
-    estadoApp.dniActual = dni;
-    const cands = await apiCall({action: 'getCandidatos'});
-    estadoApp.candidatos = cands.data.filter(c => c.activo);
-    
-    document.getElementById('dni-display').textContent = dni;
-    renderCandidatosVotacion();
-    document.getElementById('step-dni').classList.add('hidden');
-    document.getElementById('step-candidatos').classList.remove('hidden');
-    document.getElementById('step-candidatos').classList.add('fade-in');
-    
-  } catch(e) {
-    if (API_URL) showToast('Error de conexión.', 'error');
-  }
-  
-  btn.disabled = false; btn.textContent = 'Verificar y Continuar';
-}
 
-function renderCandidatosVotacion() {
-  const grid = document.getElementById('candidatos-grid');
-  if (!estadoApp.candidatos.length) {
-    grid.innerHTML = '<div class="col-span-3 text-center py-12 text-gray-400"><p class="text-4xl mb-3">📋</p><p>No hay candidatos registrados aún.</p></div>';
-    return;
-  }
-  grid.innerHTML = estadoApp.candidatos.map(c => `
+    function showOverlay(id) {
+      document.getElementById(id).classList.add('show');
+    }
+    function cerrarOverlay(id) {
+      document.getElementById(id).classList.remove('show');
+    }
+
+    function mostrarSpinner(containerId, msg = 'Cargando...') {
+      document.getElementById(containerId).innerHTML = `<div class="py-8 text-center"><div class="spinner"></div><p class="text-gray-400 text-sm mt-3">${msg}</p></div>`;
+    }
+
+    function formatDNI(input) {
+      let v = input.value.replace(/[^0-9]/g, '');
+      if (v.length > 4 && v.length <= 8) v = v.slice(0, 4) + '-' + v.slice(4);
+      else if (v.length > 8) v = v.slice(0, 4) + '-' + v.slice(4, 8) + '-' + v.slice(8, 13);
+      input.value = v;
+    }
+
+    async function apiCall(body) {
+      if (!API_URL) {
+        showOverlay('overlay-config');
+        throw new Error('Sin URL de API configurada');
+      }
+      // Google Apps Script acepta GET con parámetros desde dominios externos
+      // Codificamos el payload como parámetro "data" en la URL
+      const params = new URLSearchParams({ data: JSON.stringify(body) });
+      const url = API_URL + '?' + params.toString();
+      const res = await fetch(url, {
+        method: 'GET',
+        redirect: 'follow'
+      });
+      return await res.json();
+    }
+
+    // ============================================================
+    // LOGIN
+    // ============================================================
+    async function doLogin() {
+      const user = document.getElementById('login-user').value.trim();
+      const pass = document.getElementById('login-pass').value;
+      const errEl = document.getElementById('login-error');
+      errEl.classList.add('hidden');
+
+      if (!user || !pass) {
+        errEl.textContent = 'Por favor completa todos los campos.';
+        errEl.classList.remove('hidden'); return;
+      }
+
+      try {
+        const data = await apiCall({ action: 'login', usuario: user, password: pass });
+        if (data.ok) {
+          estadoApp.adminLogged = true;
+          showPage('page-admin');
+          loadDashboard();
+          loadCandidatosAdmin();
+          loadControlEstado();
+        } else {
+          errEl.textContent = data.msg || 'Credenciales incorrectas.';
+          errEl.classList.remove('hidden');
+        }
+      } catch (e) {
+        if (!API_URL) return;
+        errEl.textContent = 'Error de conexión. Verifica la URL del API.';
+        errEl.classList.remove('hidden');
+      }
+    }
+
+    document.getElementById('login-pass').addEventListener('keypress', e => {
+      if (e.key === 'Enter') doLogin();
+    });
+
+    // ============================================================
+    // VOTACIÓN
+    // ============================================================
+    function showAdmin() {
+      if (estadoApp.adminLogged) {
+        showPage('page-admin');
+      } else {
+        showPage('page-login');
+      }
+    }
+
+    function irAVotacion() {
+      showPage('page-votacion');
+      resetVotacion();
+    }
+
+    function logout() {
+      estadoApp.adminLogged = false;
+      showPage('page-login');
+    }
+
+    async function verificarDNI() {
+      const dni = document.getElementById('dni-input').value.trim();
+      if (dni.length < 13) {
+        showToast('DNI inválido. Ingresa los 13 dígitos.', 'error'); return;
+      }
+
+      const btn = document.getElementById('btn-verificar');
+      btn.disabled = true; btn.textContent = 'Verificando...';
+
+      try {
+        // Verificar votación activa
+        const est = await apiCall({ action: 'getEstadisticas' });
+        if (!est.votacionActiva) {
+          showToast('La votación no está activa en este momento.', 'error');
+          btn.disabled = false; btn.textContent = 'Verificar y Continuar'; return;
+        }
+
+        // Verificar DNI
+        const res = await apiCall({ action: 'checkDNI', dni });
+        if (res.yaVoto) {
+          showToast('Este DNI ya emitió su voto.', 'error');
+          btn.disabled = false; btn.textContent = 'Verificar y Continuar'; return;
+        }
+
+        // Cargar candidatos
+        estadoApp.dniActual = dni;
+        const cands = await apiCall({ action: 'getCandidatos' });
+        estadoApp.candidatos = cands.data.filter(c => c.activo);
+
+        document.getElementById('dni-display').textContent = dni;
+        renderCandidatosVotacion();
+        document.getElementById('step-dni').classList.add('hidden');
+        document.getElementById('step-candidatos').classList.remove('hidden');
+        document.getElementById('step-candidatos').classList.add('fade-in');
+
+      } catch (e) {
+        if (API_URL) showToast('Error de conexión.', 'error');
+      }
+
+      btn.disabled = false; btn.textContent = 'Verificar y Continuar';
+    }
+
+    function renderCandidatosVotacion() {
+      const grid = document.getElementById('candidatos-grid');
+      if (!estadoApp.candidatos.length) {
+        grid.innerHTML = '<div class="col-span-3 text-center py-12 text-gray-400"><p class="text-4xl mb-3">📋</p><p>No hay candidatos registrados aún.</p></div>';
+        return;
+      }
+      grid.innerHTML = estadoApp.candidatos.map(c => `
     <div class="card-candidato bg-white rounded-2xl border-2 border-transparent overflow-hidden" 
          id="card-${c.id}" onclick="seleccionarCandidato('${c.id}')">
       <div class="aspect-square bg-gradient-to-br from-blue-50 to-indigo-100 overflow-hidden">
-        ${c.foto ? 
+        ${c.foto ?
           `<img src="${c.foto}" alt="${c.nombre}" class="w-full h-full object-cover object-top"
                onerror="this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;height:100%;font-size:64px;\'>👤</div>'">` :
           `<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:64px;">👤</div>`
@@ -645,99 +834,99 @@ function renderCandidatosVotacion() {
       </div>
     </div>
   `).join('');
-}
-
-function seleccionarCandidato(id) {
-  document.querySelectorAll('.card-candidato').forEach(c => c.classList.remove('selected'));
-  document.getElementById('card-' + id).classList.add('selected');
-  estadoApp.candidatoSeleccionado = estadoApp.candidatos.find(c => c.id === id);
-  document.getElementById('btn-votar').disabled = false;
-}
-
-function confirmarVoto() {
-  if (!estadoApp.candidatoSeleccionado) return;
-  const c = estadoApp.candidatoSeleccionado;
-  document.getElementById('confirm-nombre').textContent = c.nombre;
-  document.getElementById('confirm-partido').textContent = c.partido;
-  showOverlay('overlay-confirmar');
-}
-
-async function emitirVoto() {
-  cerrarOverlay('overlay-confirmar');
-  const c = estadoApp.candidatoSeleccionado;
-  
-  try {
-    const res = await apiCall({
-      action: 'votar',
-      dni: estadoApp.dniActual,
-      candidato_id: c.id
-    });
-    
-    if (res.ok) {
-      document.getElementById('exito-dni').textContent = estadoApp.dniActual;
-      document.getElementById('exito-candidato').textContent = c.nombre + ' — ' + c.partido;
-      document.getElementById('exito-hora').textContent = new Date().toLocaleTimeString('es-HN');
-      showOverlay('overlay-exito');
-    } else {
-      showToast(res.msg || 'Error al registrar el voto.', 'error');
     }
-  } catch(e) {
-    showToast('Error de conexión.', 'error');
-  }
-}
 
-function resetVotacion() {
-  cerrarOverlay('overlay-exito');
-  estadoApp.dniActual = '';
-  estadoApp.candidatoSeleccionado = null;
-  document.getElementById('dni-input').value = '';
-  document.getElementById('step-dni').classList.remove('hidden');
-  document.getElementById('step-candidatos').classList.add('hidden');
-  document.getElementById('btn-votar').disabled = true;
-}
-
-// ============================================================
-// ADMIN — Dashboard
-// ============================================================
-async function loadDashboard() {
-  mostrarSpinner('resultados-lista', 'Cargando resultados...');
-  try {
-    const data = await apiCall({action: 'getEstadisticas'});
-    estadoApp.estadisticas = data;
-    
-    document.getElementById('stat-total').textContent = data.total;
-    document.getElementById('stat-candidatos').textContent = data.candidatos.length;
-    
-    const estadoEl = document.getElementById('stat-estado');
-    if (data.votacionActiva) {
-      estadoEl.textContent = '🟢 Activa';
-      estadoEl.className = 'text-xl font-bold text-green-700';
-    } else {
-      estadoEl.textContent = '🔴 Cerrada';
-      estadoEl.className = 'text-xl font-bold text-red-600';
+    function seleccionarCandidato(id) {
+      document.querySelectorAll('.card-candidato').forEach(c => c.classList.remove('selected'));
+      document.getElementById('card-' + id).classList.add('selected');
+      estadoApp.candidatoSeleccionado = estadoApp.candidatos.find(c => c.id === id);
+      document.getElementById('btn-votar').disabled = false;
     }
-    
-    renderResultados(data);
-  } catch(e) {
-    document.getElementById('resultados-lista').innerHTML = '<p class="text-red-400 text-center py-8">Error al cargar estadísticas. Verifica la conexión.</p>';
-  }
-}
 
-function renderResultados(data) {
-  const lista = document.getElementById('resultados-lista');
-  if (!data.candidatos.length) {
-    lista.innerHTML = '<p class="text-gray-400 text-center py-8">Sin candidatos registrados.</p>';
-    return;
-  }
-  
-  const total = data.total || 1;
-  const sorted = [...data.candidatos].sort((a,b) => (data.conteo[b.id]||0) - (data.conteo[a.id]||0));
-  
-  lista.innerHTML = sorted.map((c, i) => {
-    const votos = data.conteo[c.id] || 0;
-    const pct = Math.round((votos / total) * 100);
-    const isLeader = i === 0 && votos > 0;
-    return `
+    function confirmarVoto() {
+      if (!estadoApp.candidatoSeleccionado) return;
+      const c = estadoApp.candidatoSeleccionado;
+      document.getElementById('confirm-nombre').textContent = c.nombre;
+      document.getElementById('confirm-partido').textContent = c.partido;
+      showOverlay('overlay-confirmar');
+    }
+
+    async function emitirVoto() {
+      cerrarOverlay('overlay-confirmar');
+      const c = estadoApp.candidatoSeleccionado;
+
+      try {
+        const res = await apiCall({
+          action: 'votar',
+          dni: estadoApp.dniActual,
+          candidato_id: c.id
+        });
+
+        if (res.ok) {
+          document.getElementById('exito-dni').textContent = estadoApp.dniActual;
+          document.getElementById('exito-candidato').textContent = c.nombre + ' — ' + c.partido;
+          document.getElementById('exito-hora').textContent = new Date().toLocaleTimeString('es-HN');
+          showOverlay('overlay-exito');
+        } else {
+          showToast(res.msg || 'Error al registrar el voto.', 'error');
+        }
+      } catch (e) {
+        showToast('Error de conexión.', 'error');
+      }
+    }
+
+    function resetVotacion() {
+      cerrarOverlay('overlay-exito');
+      estadoApp.dniActual = '';
+      estadoApp.candidatoSeleccionado = null;
+      document.getElementById('dni-input').value = '';
+      document.getElementById('step-dni').classList.remove('hidden');
+      document.getElementById('step-candidatos').classList.add('hidden');
+      document.getElementById('btn-votar').disabled = true;
+    }
+
+    // ============================================================
+    // ADMIN — Dashboard
+    // ============================================================
+    async function loadDashboard() {
+      mostrarSpinner('resultados-lista', 'Cargando resultados...');
+      try {
+        const data = await apiCall({ action: 'getEstadisticas' });
+        estadoApp.estadisticas = data;
+
+        document.getElementById('stat-total').textContent = data.total;
+        document.getElementById('stat-candidatos').textContent = data.candidatos.length;
+
+        const estadoEl = document.getElementById('stat-estado');
+        if (data.votacionActiva) {
+          estadoEl.textContent = '🟢 Activa';
+          estadoEl.className = 'text-xl font-bold text-green-700';
+        } else {
+          estadoEl.textContent = '🔴 Cerrada';
+          estadoEl.className = 'text-xl font-bold text-red-600';
+        }
+
+        renderResultados(data);
+      } catch (e) {
+        document.getElementById('resultados-lista').innerHTML = '<p class="text-red-400 text-center py-8">Error al cargar estadísticas. Verifica la conexión.</p>';
+      }
+    }
+
+    function renderResultados(data) {
+      const lista = document.getElementById('resultados-lista');
+      if (!data.candidatos.length) {
+        lista.innerHTML = '<p class="text-gray-400 text-center py-8">Sin candidatos registrados.</p>';
+        return;
+      }
+
+      const total = data.total || 1;
+      const sorted = [...data.candidatos].sort((a, b) => (data.conteo[b.id] || 0) - (data.conteo[a.id] || 0));
+
+      lista.innerHTML = sorted.map((c, i) => {
+        const votos = data.conteo[c.id] || 0;
+        const pct = Math.round((votos / total) * 100);
+        const isLeader = i === 0 && votos > 0;
+        return `
     <div class="mb-5 pb-5 border-b border-gray-100 last:border-0">
       <div class="flex items-center gap-4 mb-2">
         ${c.foto ? `<img src="${c.foto}" class="w-12 h-12 rounded-full object-cover border-2 border-blue-100" onerror="this.style.display='none'">` : `<div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-xl">👤</div>`}
@@ -757,30 +946,30 @@ function renderResultados(data) {
         <div class="barra-voto" style="width:${pct}%"></div>
       </div>
     </div>`;
-  }).join('');
-}
+      }).join('');
+    }
 
-// ============================================================
-// ADMIN — Candidatos
-// ============================================================
-async function loadCandidatosAdmin() {
-  mostrarSpinner('candidatos-admin-lista', 'Cargando candidatos...');
-  try {
-    const res = await apiCall({action: 'getCandidatos'});
-    estadoApp.candidatos = res.data;
-    renderCandidatosAdmin(res.data);
-  } catch(e) {
-    document.getElementById('candidatos-admin-lista').innerHTML = '<p class="text-red-400 col-span-2 text-center py-8">Error al cargar candidatos.</p>';
-  }
-}
+    // ============================================================
+    // ADMIN — Candidatos
+    // ============================================================
+    async function loadCandidatosAdmin() {
+      mostrarSpinner('candidatos-admin-lista', 'Cargando candidatos...');
+      try {
+        const res = await apiCall({ action: 'getCandidatos' });
+        estadoApp.candidatos = res.data;
+        renderCandidatosAdmin(res.data);
+      } catch (e) {
+        document.getElementById('candidatos-admin-lista').innerHTML = '<p class="text-red-400 col-span-2 text-center py-8">Error al cargar candidatos.</p>';
+      }
+    }
 
-function renderCandidatosAdmin(candidatos) {
-  const lista = document.getElementById('candidatos-admin-lista');
-  if (!candidatos.length) {
-    lista.innerHTML = '<div class="col-span-2 text-center py-12 text-gray-400"><p class="text-4xl mb-3">👤</p><p>No hay candidatos registrados.</p></div>';
-    return;
-  }
-  lista.innerHTML = candidatos.map(c => `
+    function renderCandidatosAdmin(candidatos) {
+      const lista = document.getElementById('candidatos-admin-lista');
+      if (!candidatos.length) {
+        lista.innerHTML = '<div class="col-span-2 text-center py-12 text-gray-400"><p class="text-4xl mb-3">👤</p><p>No hay candidatos registrados.</p></div>';
+        return;
+      }
+      lista.innerHTML = candidatos.map(c => `
     <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
       <div class="flex items-center gap-4 p-4">
         ${c.foto ? `<img src="${c.foto}" class="w-16 h-16 rounded-xl object-cover" onerror="this.style.display='none'">` : `<div class="w-16 h-16 rounded-xl bg-blue-50 flex items-center justify-center text-2xl">👤</div>`}
@@ -794,155 +983,156 @@ function renderCandidatosAdmin(candidatos) {
       </div>
     </div>
   `).join('');
-}
-
-function toggleFormCandidato() {
-  const f = document.getElementById('form-candidato');
-  f.classList.toggle('hidden');
-}
-
-async function agregarCandidato() {
-  const nombre = document.getElementById('cand-nombre').value.trim();
-  const partido = document.getElementById('cand-partido').value.trim();
-  const foto = document.getElementById('cand-foto').value.trim();
-  
-  if (!nombre || !partido) {
-    showToast('Nombre y partido son requeridos.', 'error'); return;
-  }
-  
-  try {
-    const res = await apiCall({action: 'addCandidato', nombre, partido, foto});
-    if (res.ok) {
-      showToast('✅ Candidato agregado exitosamente.', 'success');
-      document.getElementById('cand-nombre').value = '';
-      document.getElementById('cand-partido').value = '';
-      document.getElementById('cand-foto').value = '';
-      toggleFormCandidato();
-      loadCandidatosAdmin();
-      loadDashboard();
-    } else {
-      showToast('Error al agregar candidato.', 'error');
     }
-  } catch(e) {
-    showToast('Error de conexión.', 'error');
-  }
-}
 
-async function eliminarCandidato(id, nombre) {
-  if (!confirm(`¿Eliminar al candidato "${nombre}"? Esta acción no se puede deshacer.`)) return;
-  
-  try {
-    const res = await apiCall({action: 'deleteCandidato', id});
-    if (res.ok) {
-      showToast('Candidato eliminado.', 'success');
-      loadCandidatosAdmin();
-      loadDashboard();
+    function toggleFormCandidato() {
+      const f = document.getElementById('form-candidato');
+      f.classList.toggle('hidden');
     }
-  } catch(e) {
-    showToast('Error de conexión.', 'error');
-  }
-}
 
-// ============================================================
-// ADMIN — Control
-// ============================================================
-async function loadControlEstado() {
-  try {
-    const data = await apiCall({action: 'getEstadisticas'});
-    updateControlUI(data.votacionActiva);
-  } catch(e) {}
-}
+    async function agregarCandidato() {
+      const nombre = document.getElementById('cand-nombre').value.trim();
+      const partido = document.getElementById('cand-partido').value.trim();
+      const foto = document.getElementById('cand-foto').value.trim();
 
-function updateControlUI(activa) {
-  const lbl = document.getElementById('control-estado-label');
-  const desc = document.getElementById('control-estado-desc');
-  const btn = document.getElementById('btn-toggle-votacion');
-  if (activa) {
-    lbl.textContent = '🟢 Votación Activa';
-    desc.textContent = 'Los estudiantes pueden votar en este momento.';
-    btn.textContent = 'Cerrar Votación';
-    btn.style.background = 'linear-gradient(135deg, #dc2626, #b91c1c)';
-  } else {
-    lbl.textContent = '🔴 Votación Cerrada';
-    desc.textContent = 'La votación está suspendida temporalmente.';
-    btn.textContent = 'Abrir Votación';
-    btn.style.background = 'linear-gradient(135deg, #16a34a, #15803d)';
-  }
-}
+      if (!nombre || !partido) {
+        showToast('Nombre y partido son requeridos.', 'error'); return;
+      }
 
-async function toggleVotacion() {
-  try {
-    const data = await apiCall({action: 'getEstadisticas'});
-    const nuevaActiva = !data.votacionActiva;
-    const res = await apiCall({action: 'toggleVotacion', activa: nuevaActiva});
-    if (res.ok) {
-      updateControlUI(nuevaActiva);
-      showToast(nuevaActiva ? '✅ Votación activada.' : '🔴 Votación cerrada.', nuevaActiva ? 'success' : '');
-      loadDashboard();
+      try {
+        const res = await apiCall({ action: 'addCandidato', nombre, partido, foto });
+        if (res.ok) {
+          showToast('✅ Candidato agregado exitosamente.', 'success');
+          document.getElementById('cand-nombre').value = '';
+          document.getElementById('cand-partido').value = '';
+          document.getElementById('cand-foto').value = '';
+          toggleFormCandidato();
+          loadCandidatosAdmin();
+          loadDashboard();
+        } else {
+          showToast('Error al agregar candidato.', 'error');
+        }
+      } catch (e) {
+        showToast('Error de conexión.', 'error');
+      }
     }
-  } catch(e) {
-    showToast('Error al cambiar estado.', 'error');
-  }
-}
 
-// ============================================================
-// ADMIN — Tabs
-// ============================================================
-function showTab(tabId) {
-  document.querySelectorAll('.admin-tab').forEach(t => t.classList.add('hidden'));
-  document.getElementById(tabId).classList.remove('hidden');
-  document.getElementById(tabId).classList.add('fade-in');
-  
-  document.querySelectorAll('.nav-btn').forEach(b => {
-    b.style.background = 'transparent';
-    b.style.color = 'rgba(255,255,255,0.7)';
-  });
-  
-  const idx = ['tab-dashboard','tab-candidatos','tab-control'].indexOf(tabId);
-  const btns = document.querySelectorAll('.nav-btn');
-  if (btns[idx]) {
-    btns[idx].style.background = 'rgba(255,255,255,0.2)';
-    btns[idx].style.color = 'white';
-  }
-  
-  if (tabId === 'tab-dashboard') loadDashboard();
-  if (tabId === 'tab-candidatos') loadCandidatosAdmin();
-  if (tabId === 'tab-control') loadControlEstado();
-}
+    async function eliminarCandidato(id, nombre) {
+      if (!confirm(`¿Eliminar al candidato "${nombre}"? Esta acción no se puede deshacer.`)) return;
 
-// Inicializar nav activo
-document.querySelectorAll('.nav-btn')[0].style.background = 'rgba(255,255,255,0.2)';
+      try {
+        const res = await apiCall({ action: 'deleteCandidato', id });
+        if (res.ok) {
+          showToast('Candidato eliminado.', 'success');
+          loadCandidatosAdmin();
+          loadDashboard();
+        }
+      } catch (e) {
+        showToast('Error de conexión.', 'error');
+      }
+    }
 
-// ============================================================
-// CONFIG URL
-// ============================================================
-function guardarConfigURL() {
-  const url = document.getElementById('config-url-input').value.trim();
-  if (!url.startsWith('https://script.google.com')) {
-    showToast('URL inválida.', 'error'); return;
-  }
-  API_URL = url;
-  localStorage.setItem('ceb_api_url', url);
-  cerrarOverlay('overlay-config');
-  showToast('✅ URL guardada. Intenta de nuevo.', 'success');
-}
+    // ============================================================
+    // ADMIN — Control
+    // ============================================================
+    async function loadControlEstado() {
+      try {
+        const data = await apiCall({ action: 'getEstadisticas' });
+        updateControlUI(data.votacionActiva);
+      } catch (e) { }
+    }
 
-// Si no hay URL configurada, mostrar config al cargar
-window.addEventListener('load', () => {
-  if (!API_URL) {
-    setTimeout(() => {
-      // Mostrar instrucción solo en login
-      const err = document.getElementById('login-error');
-      err.textContent = '⚙️ Primero debes configurar la URL del API. ';
-      const link = document.createElement('a');
-      link.href = '#'; link.textContent = 'Configurar aquí';
-      link.style.fontWeight = '700'; link.style.color = '#1a3a6b';
-      link.onclick = (e) => { e.preventDefault(); showOverlay('overlay-config'); };
-      err.appendChild(link);
-      err.classList.remove('hidden');
-    }, 500);
-  }
-});
-</script>
+    function updateControlUI(activa) {
+      const lbl = document.getElementById('control-estado-label');
+      const desc = document.getElementById('control-estado-desc');
+      const btn = document.getElementById('btn-toggle-votacion');
+      if (activa) {
+        lbl.textContent = '🟢 Votación Activa';
+        desc.textContent = 'Los estudiantes pueden votar en este momento.';
+        btn.textContent = 'Cerrar Votación';
+        btn.style.background = 'linear-gradient(135deg, #dc2626, #b91c1c)';
+      } else {
+        lbl.textContent = '🔴 Votación Cerrada';
+        desc.textContent = 'La votación está suspendida temporalmente.';
+        btn.textContent = 'Abrir Votación';
+        btn.style.background = 'linear-gradient(135deg, #16a34a, #15803d)';
+      }
+    }
+
+    async function toggleVotacion() {
+      try {
+        const data = await apiCall({ action: 'getEstadisticas' });
+        const nuevaActiva = !data.votacionActiva;
+        const res = await apiCall({ action: 'toggleVotacion', activa: nuevaActiva });
+        if (res.ok) {
+          updateControlUI(nuevaActiva);
+          showToast(nuevaActiva ? '✅ Votación activada.' : '🔴 Votación cerrada.', nuevaActiva ? 'success' : '');
+          loadDashboard();
+        }
+      } catch (e) {
+        showToast('Error al cambiar estado.', 'error');
+      }
+    }
+
+    // ============================================================
+    // ADMIN — Tabs
+    // ============================================================
+    function showTab(tabId) {
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+      document.getElementById(tabId).classList.add('fade-in');
+
+      document.querySelectorAll('.nav-btn').forEach(b => {
+        b.style.background = 'transparent';
+        b.style.color = 'rgba(255,255,255,0.7)';
+      });
+
+      const idx = ['tab-dashboard', 'tab-candidatos', 'tab-control'].indexOf(tabId);
+      const btns = document.querySelectorAll('.nav-btn');
+      if (btns[idx]) {
+        btns[idx].style.background = 'rgba(255,255,255,0.2)';
+        btns[idx].style.color = 'white';
+      }
+
+      if (tabId === 'tab-dashboard') loadDashboard();
+      if (tabId === 'tab-candidatos') loadCandidatosAdmin();
+      if (tabId === 'tab-control') loadControlEstado();
+    }
+
+    // Inicializar nav activo
+    document.querySelectorAll('.nav-btn')[0].style.background = 'rgba(255,255,255,0.2)';
+
+    // ============================================================
+    // CONFIG URL
+    // ============================================================
+    function guardarConfigURL() {
+      const url = document.getElementById('config-url-input').value.trim();
+      if (!url.startsWith('https://script.google.com')) {
+        showToast('URL inválida.', 'error'); return;
+      }
+      API_URL = url;
+      localStorage.setItem('ceb_api_url', url);
+      cerrarOverlay('overlay-config');
+      showToast('✅ URL guardada. Intenta de nuevo.', 'success');
+    }
+
+    // Si no hay URL configurada, mostrar config al cargar
+    window.addEventListener('load', () => {
+      if (!API_URL) {
+        setTimeout(() => {
+          // Mostrar instrucción solo en login
+          const err = document.getElementById('login-error');
+          err.textContent = '⚙️ Primero debes configurar la URL del API. ';
+          const link = document.createElement('a');
+          link.href = '#'; link.textContent = 'Configurar aquí';
+          link.style.fontWeight = '700'; link.style.color = '#1a3a6b';
+          link.onclick = (e) => { e.preventDefault(); showOverlay('overlay-config'); };
+          err.appendChild(link);
+          err.classList.remove('hidden');
+        }, 500);
+      }
+    });
+  </script>
 </body>
+
 </html>
