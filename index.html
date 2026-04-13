@@ -648,7 +648,7 @@
     // ============================================================
     //  CONFIGURACIÓN — CAMBIA ESTA URL POR LA DE TU APPS SCRIPT
     // ============================================================
-    let API_URL = localStorage.getItem('ceb_api_url') || '';
+    let API_URL = 'https://script.google.com/macros/s/AKfycbz8X6ulkHjZKs4VEI4okgVNGUZ9TAhKw6LLdyUbm_8j61JVDZW4aTq1c6djnOelLBLp/exec';
 
     // ============================================================
     // Estado global
@@ -697,18 +697,13 @@
     }
 
     async function apiCall(body) {
-      if (!API_URL) {
-        showOverlay('overlay-config');
-        throw new Error('Sin URL de API configurada');
+      // Enviar cada campo del body como parámetro URL individual
+      const params = new URLSearchParams();
+      for (const key in body) {
+        params.append(key, body[key]);
       }
-      // Google Apps Script acepta GET con parámetros desde dominios externos
-      // Codificamos el payload como parámetro "data" en la URL
-      const params = new URLSearchParams({ data: JSON.stringify(body) });
       const url = API_URL + '?' + params.toString();
-      const res = await fetch(url, {
-        method: 'GET',
-        redirect: 'follow'
-      });
+      const res = await fetch(url, { method: 'GET', redirect: 'follow' });
       return await res.json();
     }
 
