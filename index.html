@@ -8,9 +8,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <link
-    href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Miranda+Sans:wght@400;600&display=swap"
-    rel="stylesheet">
-  <link
     href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap"
     rel="stylesheet">
   <style>
@@ -71,14 +68,15 @@
     }
 
     /* ══════════════════════════════════
-   LOGIN
-══════════════════════════════════ */
+       LOGIN
+    ══════════════════════════════════ */
     #screen-login {
       align-items: center;
       justify-content: center;
       background: linear-gradient(135deg, var(--azul-oscuro) 0%, var(--azul) 40%, var(--rojo-oscuro) 100%);
       position: relative;
       overflow: hidden;
+      padding: 16px;
     }
 
     #screen-login::before {
@@ -92,12 +90,14 @@
       background: white;
       border-radius: 24px;
       padding: 40px 44px;
-      width: 420px;
-      max-width: 95vw;
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .35);
       position: relative;
       z-index: 1;
       animation: slideUp 0.5s cubic-bezier(.4, 0, .2, 1);
+      overflow-y: auto;
+      max-height: calc(100vh - 32px);
     }
 
     @keyframes slideUp {
@@ -122,12 +122,12 @@
       justify-content: center;
       margin: 0 auto 20px;
       font-size: 36px;
-      box-shadow: 0 8px 24px rgba(0, 61, 165, 0.3);
+      box-shadow: 0 8px 24px rgba(0, 61, 165, .3);
     }
 
     .login-card h1 {
       text-align: center;
-      font-size: 22px;
+      font-size: clamp(16px, 3.5vw, 22px);
       color: var(--azul-oscuro);
       letter-spacing: 1px;
     }
@@ -219,8 +219,8 @@
     }
 
     /* ══════════════════════════════════
-   VOTACIÓN
-══════════════════════════════════ */
+       VOTACIÓN
+    ══════════════════════════════════ */
     #screen-votacion {
       flex-direction: column;
       background: var(--gris-bg);
@@ -228,42 +228,52 @@
 
     .vot-header {
       background: linear-gradient(90deg, var(--azul-oscuro), var(--azul));
-      padding: 14px 24px;
+      padding: 0 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       box-shadow: 0 2px 12px rgba(0, 0, 0, .15);
       flex-shrink: 0;
+      min-height: 56px;
+      gap: 8px;
     }
 
     .vot-header-left {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
     }
 
     .vot-header-logo {
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
       border-radius: 50%;
       background: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
-      flex-shrink: 0;
+      font-size: 20px;
     }
 
     .vot-header h1 {
-      font-size: 16px;
+      font-size: clamp(11px, 2.5vw, 16px);
       color: white;
       letter-spacing: .5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .vot-header p {
-      font-size: 11px;
+      font-size: clamp(9px, 1.8vw, 11px);
       color: rgba(255, 255, 255, .7);
       font-family: 'Open Sans', sans-serif;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .vot-body {
@@ -271,7 +281,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: clamp(12px, 3vw, 20px);
       overflow: hidden;
     }
 
@@ -279,21 +289,21 @@
     .dni-card {
       background: white;
       border-radius: 24px;
-      padding: 40px;
-      width: 480px;
-      max-width: 95vw;
+      padding: clamp(24px, 5vw, 40px);
+      width: 100%;
+      max-width: 480px;
       text-align: center;
       box-shadow: 0 4px 32px rgba(0, 0, 0, .08);
       animation: slideUp .4s ease;
     }
 
     .dni-card .icono {
-      font-size: 56px;
+      font-size: clamp(40px, 8vw, 56px);
       margin-bottom: 16px;
     }
 
     .dni-card h2 {
-      font-size: 26px;
+      font-size: clamp(20px, 4vw, 26px);
       color: var(--azul-oscuro);
       margin-bottom: 8px;
     }
@@ -310,7 +320,7 @@
       padding: 16px;
       border: 2px solid var(--borde);
       border-radius: 14px;
-      font-size: 22px;
+      font-size: clamp(16px, 4vw, 22px);
       text-align: center;
       letter-spacing: 4px;
       font-family: 'Oswald', sans-serif;
@@ -361,17 +371,17 @@
 
     .cand-header {
       text-align: center;
-      padding: 16px;
+      padding: clamp(10px, 2vw, 16px);
       flex-shrink: 0;
     }
 
     .cand-header h2 {
-      font-size: 22px;
+      font-size: clamp(16px, 3.5vw, 22px);
       color: var(--azul-oscuro);
     }
 
     .cand-header p {
-      font-size: 13px;
+      font-size: clamp(11px, 2vw, 13px);
       color: var(--texto-suave);
       font-family: 'Open Sans', sans-serif;
     }
@@ -379,13 +389,13 @@
     .cand-grid-wrap {
       flex: 1;
       overflow-y: auto;
-      padding: 0 20px 20px;
+      padding: 0 clamp(12px, 3vw, 20px) 16px;
     }
 
     .cand-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(min(180px, 44vw), 1fr));
+      gap: clamp(10px, 2vw, 20px);
       max-width: 900px;
       margin: 0 auto;
       padding: 10px 0;
@@ -451,7 +461,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 60px;
+      font-size: clamp(40px, 8vw, 60px);
       overflow: hidden;
     }
 
@@ -463,11 +473,11 @@
     }
 
     .card-cand-info {
-      padding: 14px;
+      padding: clamp(10px, 2vw, 14px);
     }
 
     .card-cand-info h3 {
-      font-size: 15px;
+      font-size: clamp(12px, 2.5vw, 15px);
       color: var(--texto);
       margin-bottom: 5px;
     }
@@ -484,25 +494,26 @@
     }
 
     .cand-footer {
-      padding: 16px 20px;
+      padding: clamp(10px, 2vw, 16px) clamp(12px, 3vw, 20px);
       background: white;
       border-top: 1px solid var(--borde);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 16px;
+      gap: clamp(8px, 2vw, 16px);
       flex-shrink: 0;
       box-shadow: 0 -4px 16px rgba(0, 0, 0, .06);
+      flex-wrap: wrap;
     }
 
     .btn-votar {
-      padding: 14px 48px;
+      padding: clamp(11px, 2vw, 14px) clamp(24px, 5vw, 48px);
       background: linear-gradient(135deg, var(--azul), var(--rojo));
       color: white;
       border: none;
       border-radius: 14px;
       font-family: 'Oswald', sans-serif;
-      font-size: 17px;
+      font-size: clamp(14px, 2.5vw, 17px);
       font-weight: 600;
       letter-spacing: 1px;
       cursor: pointer;
@@ -521,8 +532,8 @@
     }
 
     /* ══════════════════════════════════
-   ADMIN
-══════════════════════════════════ */
+       ADMIN
+    ══════════════════════════════════ */
     #screen-admin {
       flex-direction: column;
       background: var(--gris-bg);
@@ -530,62 +541,78 @@
 
     .admin-header {
       background: linear-gradient(90deg, var(--azul-oscuro), var(--azul));
-      padding: 0 24px;
+      padding: 0 clamp(12px, 3vw, 24px);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 60px;
+      height: 56px;
       flex-shrink: 0;
       box-shadow: 0 2px 12px rgba(0, 0, 0, .15);
+      gap: 8px;
     }
 
     .admin-header-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
     }
 
     .admin-header-logo {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
+      flex-shrink: 0;
       border-radius: 50%;
       background: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 17px;
     }
 
     .admin-header h1 {
-      font-size: 16px;
+      font-size: clamp(12px, 2.5vw, 16px);
       color: white;
       letter-spacing: .5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .admin-header-right {
       display: flex;
-      gap: 8px;
+      gap: 6px;
+      flex-shrink: 0;
     }
 
     .admin-tabs {
       display: flex;
-      gap: 2px;
-      padding: 0 24px;
+      gap: 0;
+      padding: 0 clamp(8px, 2vw, 24px);
       background: var(--azul-oscuro);
       flex-shrink: 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .admin-tabs::-webkit-scrollbar {
+      display: none;
     }
 
     .tab-btn {
-      padding: 10px 20px;
+      padding: 10px clamp(10px, 2.5vw, 20px);
       color: rgba(255, 255, 255, .6);
       background: transparent;
       border: none;
       cursor: pointer;
       font-family: 'Oswald', sans-serif;
-      font-size: 14px;
+      font-size: clamp(12px, 2vw, 14px);
       letter-spacing: .5px;
       border-bottom: 3px solid transparent;
       transition: all .2s;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .tab-btn:hover {
@@ -608,7 +635,7 @@
       display: none;
       flex: 1;
       overflow-y: auto;
-      padding: 24px;
+      padding: clamp(12px, 3vw, 24px);
     }
 
     .tab-content.active {
@@ -619,14 +646,14 @@
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 20px;
+      gap: clamp(10px, 2vw, 16px);
+      margin-bottom: clamp(14px, 2.5vw, 20px);
     }
 
     .stat-card {
       background: white;
       border-radius: 16px;
-      padding: 20px;
+      padding: clamp(14px, 2.5vw, 20px);
       box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
       border-left: 4px solid var(--azul);
     }
@@ -640,7 +667,7 @@
     }
 
     .stat-card p.label {
-      font-size: 12px;
+      font-size: clamp(10px, 1.8vw, 12px);
       color: var(--texto-suave);
       font-weight: 700;
       text-transform: uppercase;
@@ -651,7 +678,7 @@
 
     .stat-card p.valor {
       font-family: 'Oswald', sans-serif;
-      font-size: 32px;
+      font-size: clamp(22px, 4vw, 32px);
       color: var(--azul-oscuro);
     }
 
@@ -666,37 +693,37 @@
     .charts-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 20px;
+      gap: clamp(10px, 2vw, 16px);
+      margin-bottom: clamp(14px, 2.5vw, 20px);
     }
 
     .chart-card {
       background: white;
       border-radius: 16px;
-      padding: 20px;
+      padding: clamp(14px, 2.5vw, 20px);
       box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
     }
 
     .chart-card h3 {
-      font-size: 15px;
+      font-size: clamp(13px, 2.5vw, 15px);
       color: var(--texto);
       margin-bottom: 16px;
     }
 
     .chart-wrap {
       position: relative;
-      height: 220px;
+      height: clamp(160px, 25vw, 220px);
     }
 
     .resultados-card {
       background: white;
       border-radius: 16px;
-      padding: 20px;
+      padding: clamp(14px, 2.5vw, 20px);
       box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
     }
 
     .resultados-card h3 {
-      font-size: 15px;
+      font-size: clamp(13px, 2.5vw, 15px);
       color: var(--texto);
       margin-bottom: 16px;
     }
@@ -704,7 +731,7 @@
     .resultado-row {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: clamp(8px, 2vw, 12px);
       margin-bottom: 16px;
       padding-bottom: 16px;
       border-bottom: 1px solid var(--borde);
@@ -717,15 +744,15 @@
     }
 
     .resultado-foto {
-      width: 44px;
-      height: 44px;
+      width: clamp(36px, 5vw, 44px);
+      height: clamp(36px, 5vw, 44px);
       border-radius: 50%;
       overflow: hidden;
       background: var(--azul-claro);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: clamp(14px, 3vw, 18px);
       flex-shrink: 0;
     }
 
@@ -737,16 +764,20 @@
 
     .resultado-info {
       flex: 1;
+      min-width: 0;
     }
 
     .resultado-info .nombre {
       font-family: 'Oswald', sans-serif;
-      font-size: 15px;
+      font-size: clamp(12px, 2.5vw, 15px);
       color: var(--texto);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .resultado-info .partido {
-      font-size: 12px;
+      font-size: clamp(10px, 1.8vw, 12px);
       color: var(--texto-suave);
       font-family: 'Open Sans', sans-serif;
     }
@@ -773,12 +804,12 @@
 
     .resultado-num .votos {
       font-family: 'Oswald', sans-serif;
-      font-size: 22px;
+      font-size: clamp(16px, 3vw, 22px);
       color: var(--azul-oscuro);
     }
 
     .resultado-num .pct {
-      font-size: 12px;
+      font-size: clamp(10px, 1.8vw, 12px);
       color: var(--texto-suave);
       font-family: 'Open Sans', sans-serif;
     }
@@ -786,14 +817,14 @@
     /* Candidatos admin */
     .candidatos-admin-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+      gap: clamp(10px, 2vw, 16px);
     }
 
     .cand-admin-card {
       background: white;
       border-radius: 16px;
-      padding: 16px;
+      padding: clamp(12px, 2vw, 16px);
       box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
       display: flex;
       align-items: center;
@@ -801,15 +832,15 @@
     }
 
     .cand-admin-foto {
-      width: 56px;
-      height: 56px;
+      width: clamp(44px, 7vw, 56px);
+      height: clamp(44px, 7vw, 56px);
       border-radius: 12px;
       overflow: hidden;
       background: var(--azul-claro);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: clamp(18px, 4vw, 24px);
       flex-shrink: 0;
     }
 
@@ -821,12 +852,16 @@
 
     .cand-admin-info {
       flex: 1;
+      min-width: 0;
     }
 
     .cand-admin-info h4 {
       font-family: 'Oswald', sans-serif;
-      font-size: 15px;
+      font-size: clamp(13px, 2.5vw, 15px);
       color: var(--texto);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .cand-admin-info span {
@@ -840,12 +875,14 @@
       color: var(--rojo);
       border: 1px solid #ffcccc;
       border-radius: 8px;
-      padding: 7px 14px;
+      padding: 7px 12px;
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
       transition: all .2s;
       font-family: 'Open Sans', sans-serif;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
     .btn-eliminar:hover {
@@ -856,7 +893,7 @@
     .form-card {
       background: white;
       border-radius: 16px;
-      padding: 24px;
+      padding: clamp(16px, 3vw, 24px);
       box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
       margin-bottom: 20px;
       display: none;
@@ -870,7 +907,7 @@
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      gap: clamp(10px, 2vw, 14px);
     }
 
     .form-field {
@@ -910,19 +947,20 @@
       display: flex;
       gap: 10px;
       margin-top: 16px;
+      flex-wrap: wrap;
     }
 
     /* Control votación */
     .control-card {
       background: white;
       border-radius: 16px;
-      padding: 24px;
+      padding: clamp(16px, 3vw, 24px);
       box-shadow: 0 2px 8px rgba(0, 0, 0, .06);
       margin-bottom: 16px;
     }
 
     .control-card h3 {
-      font-size: 18px;
+      font-size: clamp(15px, 2.5vw, 18px);
       color: var(--texto);
       margin-bottom: 6px;
     }
@@ -940,12 +978,14 @@
       justify-content: space-between;
       background: var(--gris-bg);
       border-radius: 12px;
-      padding: 16px 20px;
+      padding: clamp(12px, 2.5vw, 16px) clamp(14px, 3vw, 20px);
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .estado-fila .estado-info h4 {
       font-family: 'Oswald', sans-serif;
-      font-size: 17px;
+      font-size: clamp(14px, 2.5vw, 17px);
     }
 
     .estado-fila .estado-info p {
@@ -957,18 +997,19 @@
 
     /* Botones generales */
     .btn-primario {
-      padding: 11px 24px;
+      padding: 11px 20px;
       background: linear-gradient(135deg, var(--azul), var(--rojo));
       color: white;
       border: none;
       border-radius: 10px;
       font-family: 'Oswald', sans-serif;
-      font-size: 14px;
+      font-size: clamp(12px, 2vw, 14px);
       font-weight: 600;
       letter-spacing: .5px;
       cursor: pointer;
       transition: all .2s;
       box-shadow: 0 3px 10px rgba(0, 61, 165, .2);
+      white-space: nowrap;
     }
 
     .btn-primario:hover {
@@ -977,7 +1018,7 @@
     }
 
     .btn-secundario {
-      padding: 11px 20px;
+      padding: 11px 16px;
       background: #f0f4ff;
       color: var(--azul);
       border: 1px solid var(--azul-claro);
@@ -987,6 +1028,7 @@
       font-weight: 700;
       cursor: pointer;
       transition: all .2s;
+      white-space: nowrap;
     }
 
     .btn-secundario:hover {
@@ -994,16 +1036,17 @@
     }
 
     .btn-logout {
-      padding: 8px 16px;
+      padding: 7px clamp(8px, 2vw, 16px);
       background: rgba(255, 255, 255, .15);
       color: white;
       border: 1px solid rgba(255, 255, 255, .3);
       border-radius: 8px;
-      font-size: 13px;
+      font-size: clamp(11px, 1.8vw, 13px);
       font-weight: 700;
       cursor: pointer;
       transition: all .2s;
       font-family: 'Open Sans', sans-serif;
+      white-space: nowrap;
     }
 
     .btn-logout:hover {
@@ -1011,16 +1054,17 @@
     }
 
     .btn-admin-vot {
-      padding: 8px 16px;
+      padding: 7px clamp(8px, 2vw, 16px);
       background: rgba(255, 255, 255, .15);
       color: white;
       border: 1px solid rgba(255, 255, 255, .3);
       border-radius: 8px;
-      font-size: 13px;
+      font-size: clamp(11px, 1.8vw, 13px);
       font-weight: 700;
       cursor: pointer;
       transition: all .2s;
       font-family: 'Open Sans', sans-serif;
+      white-space: nowrap;
     }
 
     .btn-admin-vot:hover {
@@ -1033,11 +1077,11 @@
       inset: 0;
       background: rgba(0, 0, 0, .6);
       backdrop-filter: blur(6px);
-      display: flex;
       align-items: center;
       justify-content: center;
       z-index: 200;
       display: none;
+      padding: 16px;
     }
 
     .modal-bg.show {
@@ -1047,15 +1091,17 @@
     .modal {
       background: white;
       border-radius: 24px;
-      padding: 40px;
+      padding: clamp(24px, 5vw, 40px);
       max-width: 460px;
-      width: 92%;
+      width: 100%;
       text-align: center;
       animation: slideUp .3s ease;
+      max-height: calc(100vh - 32px);
+      overflow-y: auto;
     }
 
     .modal h3 {
-      font-size: 22px;
+      font-size: clamp(18px, 3.5vw, 22px);
       color: var(--texto);
       margin-bottom: 8px;
     }
@@ -1067,7 +1113,7 @@
     }
 
     .modal-icon {
-      font-size: 56px;
+      font-size: clamp(40px, 8vw, 56px);
       margin-bottom: 16px;
     }
 
@@ -1081,7 +1127,7 @@
 
     .modal-info-box .cand-nombre {
       font-family: 'Oswald', sans-serif;
-      font-size: 18px;
+      font-size: clamp(15px, 3vw, 18px);
       color: var(--azul-oscuro);
     }
 
@@ -1182,6 +1228,7 @@
       transition: transform .35s cubic-bezier(.4, 0, .2, 1);
       white-space: nowrap;
       font-family: 'Open Sans', sans-serif;
+      max-width: calc(100vw - 32px);
     }
 
     #toast.show {
@@ -1225,9 +1272,10 @@
       font-family: 'Open Sans', sans-serif;
     }
 
-    /* Scrollbar suave */
+    /* Scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
+      height: 6px;
     }
 
     ::-webkit-scrollbar-track {
@@ -1239,14 +1287,21 @@
       border-radius: 3px;
     }
 
-    /* Responsive */
-    @media(max-width:700px) {
-      .stats-grid {
-        grid-template-columns: 1fr 1fr;
-      }
+    /* ══════════════════════════════════
+       RESPONSIVE BREAKPOINTS
+    ══════════════════════════════════ */
 
+    /* Tablet horizontal y pantallas medianas (≤900px) */
+    @media (max-width: 900px) {
       .charts-row {
         grid-template-columns: 1fr;
+      }
+    }
+
+    /* Tablet y móvil grande (≤700px) */
+    @media (max-width: 700px) {
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
       }
 
       .form-grid {
@@ -1257,11 +1312,161 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
       }
+
+      .vot-header .vot-header-left p {
+        display: none;
+      }
+
+      /* Ocultar texto largo en botones del header, dejar solo iconos en pantallas pequeñas */
+      .btn-admin-vot .txt-largo,
+      .btn-logout .txt-largo {
+        display: none;
+      }
     }
 
-    @media(max-width:480px) {
+    /* Móvil (≤480px) */
+    @media (max-width: 480px) {
       .stats-grid {
         grid-template-columns: 1fr;
+      }
+
+      .login-card {
+        padding: 28px 20px;
+      }
+
+      .login-logo {
+        width: 64px;
+        height: 64px;
+        font-size: 28px;
+      }
+
+      .cand-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .card-cand-info {
+        padding: 8px 10px;
+      }
+
+      .cand-header {
+        padding: 8px 12px;
+      }
+
+      .cand-footer {
+        padding: 10px 12px;
+        gap: 8px;
+      }
+
+      .cand-footer #hint-seleccion {
+        display: none;
+      }
+
+      .modal {
+        border-radius: 18px;
+      }
+
+      .modal-btns {
+        flex-direction: column;
+      }
+
+      .modal-btns .btn-cancelar,
+      .modal-btns .btn-confirmar {
+        width: 100%;
+      }
+
+      .admin-header-right .btn-admin-vot {
+        display: none;
+      }
+
+      .tab-btn {
+        padding: 9px 10px;
+        font-size: 12px;
+      }
+
+      .resultado-row {
+        gap: 8px;
+      }
+
+      .resultado-num .votos {
+        font-size: 18px;
+      }
+
+      .estado-fila {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .form-actions {
+        flex-direction: column;
+      }
+
+      .form-actions .btn-primario,
+      .form-actions .btn-secundario {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    /* Pantallas muy pequeñas (≤360px) */
+    @media (max-width: 360px) {
+      .cand-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .card-cand-foto {
+        font-size: 32px;
+      }
+
+      .card-cand-info h3 {
+        font-size: 11px;
+      }
+
+      .partido-badge {
+        font-size: 10px;
+        padding: 2px 7px;
+      }
+
+      .vot-header-logo {
+        width: 34px;
+        height: 34px;
+        font-size: 16px;
+      }
+
+      .vot-header h1 {
+        font-size: 12px;
+      }
+    }
+
+    /* Pantallas altas en móvil — ajuste de la grid de candidatos */
+    @media (max-height: 600px) {
+      .dni-card .icono {
+        font-size: 32px;
+        margin-bottom: 8px;
+      }
+
+      .dni-card h2 {
+        font-size: 18px;
+      }
+
+      .dni-card {
+        padding: 20px;
+      }
+
+      .cand-header {
+        padding: 6px;
+      }
+    }
+
+    /* Desktop grande (≥1200px) */
+    @media (min-width: 1200px) {
+      .cand-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+
+      .stats-grid {
+        gap: 20px;
       }
     }
   </style>
@@ -1347,8 +1552,8 @@
         </div>
       </div>
       <div class="admin-header-right">
-        <button class="btn-admin-vot" onclick="irVotacion()">🖥️ Pantalla de Votación</button>
-        <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
+        <button class="btn-admin-vot" onclick="irVotacion()">🖥️ Votación</button>
+        <button class="btn-logout" onclick="logout()">Salir</button>
       </div>
     </div>
     <div class="admin-tabs">
@@ -1397,8 +1602,8 @@
 
       <!-- CANDIDATOS -->
       <div id="tab-candidatos" class="tab-content">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-          <h2 style="font-size:20px;color:var(--texto);">Gestión de Candidatos</h2>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;">
+          <h2 style="font-size:clamp(16px,3vw,20px);color:var(--texto);">Gestión de Candidatos</h2>
           <button class="btn-primario" onclick="toggleForm()">+ Agregar Candidato</button>
         </div>
         <div id="form-agregar" class="form-card">
@@ -1703,7 +1908,6 @@
       const values = d.candidatos.map(c => d.conteo[c.id] || 0);
       const colors = ['#003DA5', '#C0001A', '#c8960c', '#16a34a', '#7c3aed', '#0891b2', '#ea580c'];
 
-      // Pie
       if (chartPie) chartPie.destroy();
       const ctxP = document.getElementById('chartPie').getContext('2d');
       chartPie = new Chart(ctxP, {
@@ -1715,7 +1919,6 @@
         }
       });
 
-      // Bar
       if (chartBar) chartBar.destroy();
       const ctxB = document.getElementById('chartBar').getContext('2d');
       chartBar = new Chart(ctxB, {
