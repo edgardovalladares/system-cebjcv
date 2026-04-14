@@ -12,21 +12,17 @@
     rel="stylesheet">
   <style>
     :root {
-      --rojo: #ea580c; /* naranja-oscuro antes rojo */
-      --rojo-oscuro: #9a3412;
-      --rojo-claro: #ffedd5;
-      --azul: #f97316; /* naranja principal antes azul */
-      --azul-oscuro: #c2410c;
-      --azul-claro: #fed7aa;
-      --negro: #111827;
-      --gris-oscuro: #374151;
+      --naranja: #f97316;
+      --naranja-oscuro: #ea580c;
+      --negro: #141414;
+      --gris-oscuro: #111827;
+      --gris-fuerte: #1f2937;
       --blanco: #ffffff;
       --gris-bg: #f3f4f6;
       --gris-card: #ffffff;
-      --texto: #1f2937;
-      --texto-suave: #6b7280;
-      --borde: #e5e7eb;
-      --dorado: #f59e0b;
+      --texto: #111827;
+      --texto-suave: #4b5563;
+      --borde: #d1d5db;
     }
 
     *,
@@ -85,7 +81,6 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     }
 
     .login-card {
@@ -115,8 +110,8 @@
     }
 
     .login-logo {
-      width: 110px;
-      height: 110px;
+      width: 150px;
+      height: 150px;
       border-radius: 50%;
       background: transparent;
       display: flex;
@@ -129,9 +124,11 @@
 
     .login-card h1 {
       text-align: center;
-      font-size: clamp(16px, 3.5vw, 22px);
-      color: var(--azul-oscuro);
+      font-size: 26px;
+      color: var(--negro);
       letter-spacing: 1px;
+      font-weight: 700;
+      margin-top: 10px;
     }
 
     .login-card .subtitulo {
@@ -140,7 +137,6 @@
       color: var(--texto-suave);
       margin-top: 4px;
       margin-bottom: 28px;
-      font-family: 'Open Sans', sans-serif;
     }
 
     .input-wrap {
@@ -155,7 +151,6 @@
       text-transform: uppercase;
       letter-spacing: .5px;
       margin-bottom: 6px;
-      font-family: 'Open Sans', sans-serif;
     }
 
     .input-wrap input {
@@ -170,31 +165,82 @@
     }
 
     .input-wrap input:focus {
-      border-color: var(--azul);
+      border-color: var(--naranja);
+    }
+
+    /* Shared Button Styles */
+    .btn-login,
+    .btn-verificar,
+    .btn-votar,
+    .btn-primario,
+    .btn-confirmar {
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      background: var(--gris-oscuro);
+      color: white;
+      font-family: 'Oswald', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: background 0.2s, opacity 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-login:hover,
+    .btn-verificar:hover,
+    .btn-votar:hover:not(:disabled),
+    .btn-primario:hover,
+    .btn-confirmar:hover {
+      background: var(--naranja);
+    }
+
+    .btn-login:active,
+    .btn-verificar:active,
+    .btn-votar:active,
+    .btn-primario:active,
+    .btn-confirmar:active {
+      transform: none;
     }
 
     .btn-login {
-      width: 100%;
       padding: 14px;
-      border: none;
-      border-radius: 6px;
-      background: var(--azul);
-      color: white;
-      font-family: 'Oswald', sans-serif;
-      font-size: 16px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      cursor: pointer;
-      transition: all .2s;
       margin-top: 8px;
+      font-size: 16px;
     }
 
-    .btn-login:hover {
-      background: var(--azul-oscuro);
+    .btn-verificar {
+      padding: 15px;
+      margin-top: 16px;
+      font-size: 16px;
     }
 
-    .btn-login:active {
-      transform: translateY(0);
+    .btn-votar {
+      padding: clamp(11px, 2vw, 14px) clamp(24px, 5vw, 48px);
+      font-size: clamp(14px, 2.5vw, 17px);
+      width: auto;
+    }
+
+    .btn-primario {
+      padding: 11px 20px;
+      font-size: clamp(12px, 2vw, 14px);
+      letter-spacing: .5px;
+      width: auto;
+    }
+
+    .btn-confirmar {
+      padding: 13px;
+      font-size: 15px;
+      letter-spacing: .5px;
+    }
+
+    .btn-votar:disabled,
+    .btn-verificar:disabled {
+      opacity: .4;
+      cursor: not-allowed;
     }
 
     #login-error {
@@ -214,7 +260,6 @@
       margin-top: 24px;
       font-size: 11px;
       color: #aaa;
-      font-family: 'Open Sans', sans-serif;
     }
 
     /* ══════════════════════════════════
@@ -227,14 +272,14 @@
 
     .vot-header {
       background: var(--negro);
-      padding: 12px 24px;
+      padding: 16px 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 3px solid var(--azul);
+      border-bottom: 4px solid var(--naranja);
       flex-shrink: 0;
-      min-height: 70px;
-      gap: 12px;
+      min-height: 90px;
+      gap: 16px;
     }
 
     .vot-header-left {
@@ -246,33 +291,38 @@
     }
 
     .vot-header-logo {
-      width: 40px;
-      height: 40px;
+      width: 80px;
+      height: 80px;
       flex-shrink: 0;
       border-radius: 50%;
       background: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 24px;
+      padding: 6px;
     }
 
     .vot-header h1 {
-      font-size: clamp(11px, 2.5vw, 16px);
+      font-size: clamp(16px, 2.5vw, 22px);
       color: white;
-      letter-spacing: .5px;
+      letter-spacing: 0.5px;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-weight: 700;
+      line-height: 1.2;
     }
 
     .vot-header p {
-      font-size: clamp(9px, 1.8vw, 11px);
-      color: rgba(255, 255, 255, .7);
+      font-size: clamp(10px, 1.8vw, 13px);
+      color: var(--naranja);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       font-family: 'Open Sans', sans-serif;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      margin-top: -2px;
     }
 
     .vot-body {
@@ -311,7 +361,6 @@
       font-size: 14px;
       color: var(--texto-suave);
       margin-bottom: 24px;
-      font-family: 'Open Sans', sans-serif;
     }
 
     .dni-input {
@@ -332,31 +381,7 @@
       box-shadow: 0 0 0 3px rgba(0, 61, 165, .12);
     }
 
-    .btn-verificar {
-      width: 100%;
-      margin-top: 16px;
-      padding: 15px;
-      background: var(--azul);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-family: 'Oswald', sans-serif;
-      font-size: 16px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      cursor: pointer;
-      transition: all .2s;
-    }
-
-    .btn-verificar:hover {
-      background: var(--azul-oscuro);
-    }
-
-    .btn-verificar:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-      transform: none;
-    }
+    /* btn-verificar styles moved to Shared Button Styles */
 
     /* Paso candidatos */
     #step-candidatos {
@@ -502,28 +527,7 @@
       flex-wrap: wrap;
     }
 
-    .btn-votar {
-      padding: clamp(11px, 2vw, 14px) clamp(24px, 5vw, 48px);
-      background: var(--azul);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-family: 'Oswald', sans-serif;
-      font-size: clamp(14px, 2.5vw, 17px);
-      font-weight: 600;
-      letter-spacing: 1px;
-      cursor: pointer;
-      transition: all .2s;
-    }
-
-    .btn-votar:hover:not(:disabled) {
-      background: var(--azul-oscuro);
-    }
-
-    .btn-votar:disabled {
-      opacity: .4;
-      cursor: not-allowed;
-    }
+    /* btn-votar styles moved to Shared Button Styles */
 
     /* ══════════════════════════════════
        ADMIN
@@ -535,14 +539,14 @@
 
     .admin-header {
       background: var(--negro);
-      padding: 12px 24px;
+      padding: 16px 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 70px;
+      height: 90px;
       flex-shrink: 0;
-      border-bottom: 3px solid var(--azul);
-      gap: 12px;
+      border-bottom: 4px solid var(--naranja);
+      gap: 16px;
     }
 
     .admin-header-left {
@@ -554,24 +558,33 @@
     }
 
     .admin-header-logo {
-      width: 34px;
-      height: 34px;
+      width: 70px;
+      height: 70px;
       flex-shrink: 0;
       border-radius: 50%;
       background: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 17px;
+      font-size: 22px;
+      padding: 6px;
     }
 
     .admin-header h1 {
-      font-size: clamp(12px, 2.5vw, 16px);
+      font-size: clamp(14px, 2.2vw, 18px);
       color: white;
-      letter-spacing: .5px;
+      letter-spacing: 0.5px;
       white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      font-weight: 700;
+    }
+
+    .admin-header p {
+      font-size: 11px;
+      color: var(--naranja);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: -2px;
     }
 
     .admin-header-right {
@@ -584,7 +597,9 @@
       display: flex;
       gap: 0;
       padding: 0 clamp(8px, 2vw, 24px);
-      background: var(--azul-oscuro);
+      background: var(--gris-oscura);
+      /* Ajustado a gris oscuro */
+      background-color: var(--gris-fuerte);
       flex-shrink: 0;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -615,7 +630,7 @@
 
     .tab-btn.active {
       color: white;
-      border-bottom-color: var(--rojo);
+      border-bottom-color: var(--naranja);
     }
 
     .admin-body {
@@ -649,7 +664,7 @@
       border-radius: 8px;
       padding: clamp(14px, 2.5vw, 20px);
       box-shadow: 0 2px 4px rgba(0, 0, 0, .05);
-      border-left: 4px solid var(--azul);
+      border-left: 4px solid var(--naranja);
     }
 
     .stat-card.rojo {
@@ -706,7 +721,14 @@
 
     .chart-wrap {
       position: relative;
-      height: clamp(160px, 25vw, 220px);
+      height: 220px;
+    }
+
+    @media (max-width: 480px) {
+      .chart-wrap {
+        height: 250px;
+        /* More height on small screens to avoid squashing */
+      }
     }
 
     .resultados-card {
@@ -787,7 +809,7 @@
     .barra {
       height: 100%;
       border-radius: 6px;
-      background: linear-gradient(90deg, var(--azul), var(--rojo));
+      background: var(--naranja);
       transition: width .8s cubic-bezier(.4, 0, .2, 1);
     }
 
@@ -990,21 +1012,7 @@
     }
 
     /* Botones generales */
-    .btn-primario {
-      padding: 11px 20px;
-      background: var(--azul);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-family: 'Oswald', sans-serif;
-      font-size: clamp(12px, 2vw, 14px);
-      font-weight: 600;
-      letter-spacing: .5px;
-      cursor: pointer;
-      transition: all .2s;
-      white-space: nowrap;
-    }
-
+    /* btn-primario styles moved to Shared Button Styles */
     .btn-primario:hover {
       transform: translateY(-1px);
       box-shadow: 0 6px 16px rgba(0, 61, 165, .3);
@@ -1155,23 +1163,7 @@
       font-family: 'Open Sans', sans-serif;
     }
 
-    .modal-btns .btn-confirmar {
-      flex: 1;
-      padding: 13px;
-      background: var(--azul);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-family: 'Oswald', sans-serif;
-      font-size: 15px;
-      font-weight: 600;
-      letter-spacing: .5px;
-      cursor: pointer;
-    }
-
-    .modal-btns .btn-confirmar:hover {
-      background: var(--azul-oscuro);
-    }
+    /* btn-confirmar styles moved to Shared Button Styles */
 
     .exito-detalle {
       background: #f0fdf4;
@@ -1214,18 +1206,22 @@
       bottom: 28px;
       left: 50%;
       transform: translateX(-50%) translateY(80px);
-      background: #1e293b;
+      background: var(--gris-fuerte);
       color: white;
-      padding: 12px 28px;
-      border-radius: 40px;
+      padding: 12px 24px;
+      border-radius: 8px;
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 600;
       z-index: 999;
       pointer-events: none;
       transition: transform .35s cubic-bezier(.4, 0, .2, 1);
       white-space: nowrap;
       font-family: 'Open Sans', sans-serif;
       max-width: calc(100vw - 32px);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     #toast.show {
@@ -1233,11 +1229,11 @@
     }
 
     #toast.ok {
-      background: #15803d;
+      border-left: 4px solid #10b981;
     }
 
     #toast.err {
-      background: var(--rojo);
+      border-left: 4px solid #ef4444;
     }
 
     /* Spinner */
@@ -1319,13 +1315,42 @@
       .btn-logout .txt-largo {
         display: none;
       }
+
       .admin-header-right {
         gap: 4px;
       }
-      .admin-header, .vot-header {
-        padding: 8px 12px;
-        min-height: 60px;
+
+      .admin-header,
+      .vot-header {
+        padding: 8px 16px;
+        min-height: 70px;
         height: auto;
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+        gap: 12px;
+      }
+
+      .vot-header-left,
+      .admin-header-left {
+        flex-direction: row;
+        width: auto;
+      }
+
+      .vot-header-logo,
+      .admin-header-logo {
+        width: 55px;
+        height: 55px;
+      }
+
+      .vot-header h1,
+      .admin-header h1 {
+        white-space: nowrap;
+        font-size: 15px;
+      }
+
+      .vot-header p {
+        font-size: 10px;
       }
     }
 
@@ -1340,9 +1365,9 @@
       }
 
       .login-logo {
-        width: 64px;
-        height: 64px;
-        font-size: 28px;
+        width: 80px;
+        height: 80px;
+        font-size: 32px;
       }
 
       .cand-grid {
@@ -1502,7 +1527,7 @@
         <img src="https://i.ibb.co/2Y8Hw4V8/logo.png" style="width:100%;height:100%;object-fit:contain;" alt="Logo">
       </div>
       <h1>INST. JOSÉ CECILIO DEL VALLE</h1>
-      <p class="subtitulo">Sistema de Votaciones Estudiantiles · v1.0 · 2026</p>
+      <p class="subtitulo">Sistema de Votaciones · v1.0 · 2026</p>
       <div class="input-wrap">
         <label>Usuario</label>
         <input id="login-user" type="text" placeholder="admin" autocomplete="username">
@@ -1526,14 +1551,15 @@
           <img src="https://i.ibb.co/2Y8Hw4V8/logo.png" style="width:100%;height:100%;object-fit:contain;" alt="Logo">
         </div>
         <div>
-          <h1 style="display:flex;align-items:center;gap:8px;">
-            <i class="h-icon" style="width:1.2em;height:1.2em;-webkit-mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/check-badge.svg);mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/check-badge.svg);"></i>
-            SISTEMA DE VOTACIONES 2026
-          </h1>
-          <p>INSTITUTO JOSÉ CECILIO DEL VALLE</p>
+          <h1>INSTITUTO JOSÉ CECILIO DEL VALLE</h1>
+          <p>SISTEMA DE VOTACIONES</p>
         </div>
       </div>
-      <button class="btn-admin-vot" onclick="irAdmin()">Panel Admin</button>
+      <button class="btn-admin-vot shrink-0" onclick="irAdmin()" title="Panel Administrativo"
+        style="padding: 8px; border-radius: 50%; width: 44px; height: 44px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+        <i class="h-icon"
+          style="width: 1.4em; height: 1.4em; -webkit-mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/cog-6-tooth.svg); mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/cog-6-tooth.svg);"></i>
+      </button>
     </div>
     <div class="vot-body">
       <!-- Paso 1: DNI -->
@@ -1543,7 +1569,8 @@
             <i class="h-icon"
               style="-webkit-mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/identification.svg);mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/identification.svg);"></i>
           </div>
-          <h2>IDENTIFICACIÓN</h2>
+          <h2>¡BIENVENIDO!</h2>
+          <p style="font-weight:bold; color:var(--negro); font-size: 16px;">SISTEMA DE VOTACIONES DEL IJCV</p>
           <p>Ingresa tu número de DNI hondureño para emitir tu voto</p>
           <input id="dni-input" class="dni-input" type="text" placeholder="0000-0000-00000" maxlength="15"
             oninput="formatDNI(this)" onkeypress="if(event.key==='Enter')verificarDNI()">
@@ -1579,7 +1606,8 @@
           <img src="https://i.ibb.co/2Y8Hw4V8/logo.png" style="width:100%;height:100%;object-fit:contain;" alt="Logo">
         </div>
         <div>
-          <h1>PANEL ADMINISTRATIVO</h1>
+          <h1>INSTITUTO JOSÉ CECILIO DEL VALLE</h1>
+          <p>SISTEMA DE VOTACIONES</p>
         </div>
       </div>
       <div class="admin-header-right">
@@ -1779,7 +1807,16 @@
     // ═══════════════════════════════════════
     function toast(msg, tipo = '') {
       const t = document.getElementById('toast');
-      t.textContent = msg; t.className = 'show ' + tipo;
+      let icon = '';
+      if (tipo === 'ok') {
+        icon = '<i class="h-icon" style="width:1.2em;height:1.2em;-webkit-mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/check-circle.svg);mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/check-circle.svg);color:#10b981;"></i>';
+      } else if (tipo === 'err') {
+        icon = '<i class="h-icon" style="width:1.2em;height:1.2em;-webkit-mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/x-circle.svg);mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/x-circle.svg);color:#ef4444;"></i>';
+      } else {
+        icon = '<i class="h-icon" style="width:1.2em;height:1.2em;-webkit-mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/information-circle.svg);mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/information-circle.svg);"></i>';
+      }
+      t.innerHTML = icon + '<span>' + msg + '</span>';
+      t.className = 'show ' + tipo;
       setTimeout(() => t.className = '', 3000);
     }
     function showScreen(id) {
@@ -1935,7 +1972,11 @@
         document.getElementById('stat-total').textContent = d.total;
         document.getElementById('stat-cands').textContent = d.candidatos.length;
         const eEl = document.getElementById('stat-estado');
-        eEl.textContent = d.votacionActiva ? '🟢 Activa' : '🔴 Cerrada';
+        const icon = d.votacionActiva
+          ? '<i class="h-icon" style="color:#16a34a; -webkit-mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/check-circle.svg); mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/check-circle.svg);"></i>'
+          : '<i class="h-icon" style="color:var(--rojo); -webkit-mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/no-symbol.svg); mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/no-symbol.svg);"></i>';
+
+        eEl.innerHTML = `${icon} ${d.votacionActiva ? 'Activa' : 'Cerrada'}`;
         eEl.style.color = d.votacionActiva ? '#16a34a' : 'var(--rojo)';
         renderResultados(d);
         renderCharts(d);
@@ -1948,10 +1989,11 @@
       document.getElementById('resultados-lista').innerHTML = sorted.length ? sorted.map((c, i) => {
         const v = d.conteo[c.id] || 0;
         const pct = Math.round((v / total) * 100);
+        const iconGanador = '<i class="h-icon" style="width:1.2em;height:1.2em;background-color:#f59e0b;-webkit-mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/trophy.svg);mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/trophy.svg);margin-left:6px;"></i>';
         return `<div class="resultado-row">
       <div class="resultado-foto">${c.foto && c.foto != 'undefined' ? `<img src="${c.foto}" onerror="this.parentElement.innerHTML='<i class=&quot;h-icon&quot; style=&quot;-webkit-mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/user.svg);mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/user.svg);&quot;></i>'">` : '<i class="h-icon" style="-webkit-mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/user.svg);mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/user.svg);"></i>'}</div>
       <div class="resultado-info">
-        <div class="nombre">${c.nombre} ${i === 0 && v > 0 ? '<span style="font-size:11px;background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:20px;margin-left:6px;font-family:Open Sans,sans-serif;">👑 Líder</span>' : ''}</div>
+        <div class="nombre">${c.nombre} ${i === 0 && v > 0 ? iconGanador : ''}</div>
         <div class="partido">${c.partido}</div>
         <div class="barra-wrap"><div class="barra" style="width:${pct}%"></div></div>
       </div>
@@ -1972,7 +2014,16 @@
         data: { labels, datasets: [{ data: values, backgroundColor: colors, borderWidth: 3, borderColor: '#fff' }] },
         options: {
           responsive: true, maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom', labels: { font: { family: 'Open Sans', size: 11 }, padding: 10 } } }
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                font: { family: 'Open Sans', size: 12, weight: 'bold' },
+                padding: 15,
+                usePointStyle: true
+              }
+            }
+          }
         }
       });
 
@@ -1985,8 +2036,8 @@
           responsive: true, maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: {
-            y: { beginAtZero: true, ticks: { stepSize: 1, font: { family: 'Open Sans', size: 11 } }, grid: { color: '#f0f0f0' } },
-            x: { ticks: { font: { family: 'Open Sans', size: 10 } }, grid: { display: false } }
+            y: { beginAtZero: true, ticks: { stepSize: 1, font: { family: 'Open Sans', size: 12, weight: 'bold' } }, grid: { color: '#f0f0f0' } },
+            x: { ticks: { font: { family: 'Open Sans', size: 10, weight: 'bold' } }, grid: { display: false } }
           }
         }
       });
@@ -2055,12 +2106,19 @@
     }
 
     function updateControlUI(activa) {
-      document.getElementById('ctrl-label').textContent = activa ? '🟢 Votación Activa' : '🔴 Votación Cerrada';
-      document.getElementById('ctrl-label').style.color = activa ? '#16a34a' : 'var(--rojo)';
+      const label = document.getElementById('ctrl-label');
+      const icon = activa
+        ? '<i class="h-icon" style="color:#16a34a; -webkit-mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/check-circle.svg); mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/check-circle.svg);"></i>'
+        : '<i class="h-icon" style="color:var(--rojo); -webkit-mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/no-symbol.svg); mask-image:url(https://unpkg.com/heroicons@2.0.18/24/solid/no-symbol.svg);"></i>';
+
+      label.innerHTML = `${icon} ${activa ? 'Votación Activa' : 'Votación Cerrada'}`;
+      label.style.color = activa ? '#16a34a' : 'var(--rojo)';
+
       document.getElementById('ctrl-desc').textContent = activa ? 'Los estudiantes pueden votar ahora.' : 'La votación está suspendida.';
+
       const btn = document.getElementById('btn-toggle');
       btn.textContent = activa ? 'CERRAR VOTACIÓN' : 'ABRIR VOTACIÓN';
-      btn.style.background = activa ? 'linear-gradient(135deg,#dc2626,#991b1b)' : 'linear-gradient(135deg,#16a34a,#15803d)';
+      btn.style.background = activa ? '#dc2626' : '#16a34a'; // Flat colors, no gradients
     }
 
     async function toggleVotacion() {
@@ -2070,7 +2128,7 @@
         const r = await api({ action: 'toggleVotacion', activa: nueva ? 'true' : 'false' });
         if (r.ok) {
           updateControlUI(nueva);
-          toast(nueva ? '✅ Votación activada.' : '🔴 Votación cerrada.', nueva ? 'ok' : 'err');
+          toast(nueva ? 'Votación activada.' : 'Votación cerrada.', nueva ? 'ok' : 'err');
           loadDashboard();
         } else toast('Error al cambiar estado.', 'err');
       } catch (e) { toast('Error de conexión.', 'err'); }
